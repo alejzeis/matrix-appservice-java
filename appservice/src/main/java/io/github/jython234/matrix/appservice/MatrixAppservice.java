@@ -26,5 +26,8 @@
  */
 package io.github.jython234.matrix.appservice;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class MatrixAppservice {
 }
