@@ -29,6 +29,8 @@ module io.github.jython234.matrix.appservice {
 
     requires snakeyaml;
 
+    requires slf4j.api;
+
     requires spring.beans;
     requires spring.core;
     requires spring.context;

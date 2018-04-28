@@ -26,8 +26,81 @@
  */
 package io.github.jython234.matrix.appservice;
 
+import io.github.jython234.matrix.appservice.exception.KeyNotFoundException;
+import io.github.jython234.matrix.appservice.registration.Registration;
+import io.github.jython234.matrix.appservice.registration.RegistrationLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+/**
+ * Represents a simple Matrix Appservice. This class
+ * is also auto-configured to be the entry point for the SpringBoot
+ * application.
+ *
+ * @author jython234
+ */
 @SpringBootApplication
 public class MatrixAppservice {
+    private static MatrixAppservice INSTANCE;
+
+    /**
+     * The Logger instance that the Appservice is using.
+     * It is recommended you use your own logger instead of this
+     * one to keep things more tidy.
+     */
+    public final Logger logger;
+
+    private Registration registration;
+
+    /**
+     * Construct a new MatrixAppservice instance with the following
+     * registration file.
+     * @param registrationLocation The location of the registration YAML file the appservice
+     *                             needs.
+     */
+    public MatrixAppservice(String registrationLocation) {
+        MatrixAppservice.INSTANCE = this;
+
+        this.logger = LoggerFactory.getLogger("Appservice");
+
+        this.loadRegistration(registrationLocation);
+    }
+
+    /**
+     * Get the current Instance of the MatrixAppservice class.
+     * @return The current instance of the MatrixAppservice class.
+     */
+    public static MatrixAppservice getInstance() {
+        return MatrixAppservice.INSTANCE;
+    }
+
+    /**
+     * Start the appservice and begin listening for
+     * requests.
+     */
+    public void run() {
+        SpringApplication.run(MatrixAppservice.class);
+    }
+
+    private void loadRegistration(String registrationLocation) {
+        this.logger.info("Loading registration file from: " + registrationLocation);
+
+        File location = new File(registrationLocation);
+        try {
+            this.registration = RegistrationLoader.loadRegistrationFromFile(location);
+        } catch(FileNotFoundException e) {
+            this.logger.error("Failed to load registration file, not found!");
+            this.logger.error("Please generate a registration file and place it in \"" + registrationLocation + "\"");
+            System.exit(1);
+        } catch (KeyNotFoundException e) {
+            this.logger.error("The registration file is invalid! Key Not Found!");
+            this.logger.error(e.getMessage());
+            System.exit(1);
+        }
+    }
 }
