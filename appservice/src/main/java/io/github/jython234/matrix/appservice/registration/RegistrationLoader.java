@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class RegistrationLoader {
@@ -56,6 +57,7 @@ public class RegistrationLoader {
      * @throws FileNotFoundException When the YAML file is not found.
      * @throws KeyNotFoundException When the YAML file is missing a key that is required.
      */
+    @SuppressWarnings("unchecked")
     public static Registration loadRegistrationFromFile(File file) throws KeyNotFoundException, FileNotFoundException {
         Yaml yaml = new Yaml();
         Registration reg = new Registration();
@@ -75,27 +77,29 @@ public class RegistrationLoader {
             throw new KeyNotFoundException("Failed to find all required keys in YAML file!");
         }
 
-        reg.namespaces.rooms = (String[]) namespacesMap.get("rooms");
+        List<String> list = ((List<String>) namespacesMap.get("rooms"));
+        reg.namespaces.rooms = list.toArray(new String[0]);
         reg.namespaces.aliases = new ArrayList<>();
         reg.namespaces.users = new ArrayList<>();
 
-        Map[] users = (Map[]) namespacesMap.get("users");
-        Map[] aliases = (Map[]) namespacesMap.get("aliases");
-        for(Map userNamespace : users) {
+        List<Map> users = (List<Map>) namespacesMap.get("users");
+        List<Map> aliases = (List<Map>) namespacesMap.get("aliases");
+
+        users.forEach((userNamespace) -> {
             Registration.UserNamespace userSpace = new Registration.UserNamespace();
             userSpace.exclusive = (boolean) userNamespace.get("exclusive");
             userSpace.regex = (String) userNamespace.get("regex");
 
             reg.namespaces.users.add(userSpace);
-        }
+        });
 
-        for(Map aliasNamespace : aliases) {
+        aliases.forEach((aliasNamespace) -> {
             Registration.AliasNamespace aliasSpace = new Registration.AliasNamespace();
             aliasSpace.exclusive = (boolean) aliasNamespace.get("exclusive");
             aliasSpace.regex = (String) aliasNamespace.get("regex");
 
             reg.namespaces.aliases.add(aliasSpace);
-        }
+        });
 
         return reg;
     }

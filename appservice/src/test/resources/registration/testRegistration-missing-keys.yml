@@ -1,0 +1,8 @@
+id: 'bigfakeid'
+url: 'http://myappservice.net'
+as_token: 'secretappservicetoken'
+sender_localpart: '@myappservice:myappservice.net'
+namespaces:
+  aliases:
+    - exclusive: false
+      regex: '#!as_.*'

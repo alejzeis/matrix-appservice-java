@@ -24,11 +24,67 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import io.github.jython234.matrix.appservice.exception.KeyNotFoundException;
+import io.github.jython234.matrix.appservice.registration.Registration;
+import io.github.jython234.matrix.appservice.registration.RegistrationLoader;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
-public class RegistrationTest {
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class RegistrationTest {
+
+    private static ResourceLoader loader;
+
+    @BeforeAll
+    static void init() {
+        loader = new DefaultResourceLoader();
+    }
+
     @Test
-    public void runLoadTest() {
-        // TODO: stub
+    @DisplayName("Load registration YAML test")
+    void runLoadTest() throws IOException, KeyNotFoundException {
+        try {
+            Registration reg = RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration.yml").getFile());
+
+            assertEquals(reg.getId(), "bigfakeid");
+            assertEquals(reg.getUrl(), "http://myappservice.net");
+            assertEquals(reg.getAsToken(), "secretappservicetoken");
+            assertEquals(reg.getHsToken(), "secrethomeservertoken");
+            assertEquals(reg.getSenderLocalpart(), "@myappservice:myappservice.net");
+
+            assertNotNull(reg.getNamespaces());
+
+            assertEquals(reg.getNamespaces().rooms.length, 1);
+            assertEquals(reg.getNamespaces().rooms[0], "!aksjdflknwerqwer:myappservice.net");
+
+            assertEquals(reg.getNamespaces().aliases.size(), 1);
+            assertFalse(reg.getNamespaces().aliases.get(0).exclusive);
+            assertEquals(reg.getNamespaces().aliases.get(0).regex, "#!as_.*");
+
+            assertEquals(reg.getNamespaces().users.size(), 1);
+            assertTrue(reg.getNamespaces().users.get(0).exclusive);
+            assertEquals(reg.getNamespaces().users.get(0).regex, "@!as_.*");
+        } catch (KeyNotFoundException | IOException e) {
+            throw e;
+        }
+    }
+
+    @Test
+    @DisplayName("Load registration YAML with missing keys test")
+    void runMissingKeysTest() {
+        assertThrows(KeyNotFoundException.class, () -> RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration-missing-keys.yml").getFile()));
+    }
+
+    @Test
+    @DisplayName("Load missing registration YAML test")
+    void runMissingFileTest() {
+        assertThrows(FileNotFoundException.class, () -> RegistrationLoader.loadRegistrationFromFile("a-non-existent-file.yml"));
     }
 }

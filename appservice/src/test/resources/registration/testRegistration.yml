@@ -1,0 +1,13 @@
+id: 'bigfakeid'
+url: 'http://myappservice.net'
+as_token: 'secretappservicetoken'
+hs_token: 'secrethomeservertoken'
+sender_localpart: '@myappservice:myappservice.net'
+namespaces:
+  users:
+    - exclusive: true
+      regex: '@!as_.*'
+  aliases:
+    - exclusive: false
+      regex: '#!as_.*'
+  rooms: ['!aksjdflknwerqwer:myappservice.net']
