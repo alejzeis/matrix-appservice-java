@@ -1,2 +1,2 @@
-# matrix-appservice-java
+# matrix-appservice-java [![Travis](https://img.shields.io/travis/jython234/matrix-appservice-java.svg?style=for-the-badge)](https://travis-ci.org/jython234/matrix-appservice-java) [![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=for-the-badge)](https://github.com/jython234/matrix-appservice-java/blob/master/LICENSE)
 Matrix application service/bridge library on top of SpringBoot, written in Java
