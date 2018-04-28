@@ -31,6 +31,8 @@ module io.github.jython234.matrix.appservice {
 
     requires slf4j.api;
 
+    requires commons.io;
+
     requires spring.beans;
     requires spring.core;
     requires spring.context;

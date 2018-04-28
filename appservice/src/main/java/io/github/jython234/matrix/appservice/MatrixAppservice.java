@@ -58,6 +58,17 @@ public class MatrixAppservice {
     private Registration registration;
 
     /**
+     * Only for Tests, do not USE!
+     */
+    MatrixAppservice() {
+        MatrixAppservice.INSTANCE = this;
+
+        this.logger = LoggerFactory.getLogger("Appservice");
+
+        this.loadRegistration("tmp/registration.yml");
+    }
+
+    /**
      * Construct a new MatrixAppservice instance with the following
      * registration file.
      * @param registrationLocation The location of the registration YAML file the appservice
@@ -96,11 +107,19 @@ public class MatrixAppservice {
         } catch(FileNotFoundException e) {
             this.logger.error("Failed to load registration file, not found!");
             this.logger.error("Please generate a registration file and place it in \"" + registrationLocation + "\"");
-            System.exit(1);
+            throw new RuntimeException(e);
         } catch (KeyNotFoundException e) {
             this.logger.error("The registration file is invalid! Key Not Found!");
             this.logger.error(e.getMessage());
-            System.exit(1);
+            throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Get this appservice's registration.
+     * @return The Registration instance this appservice is using.
+     */
+    public Registration getRegistration() {
+        return this.registration;
     }
 }

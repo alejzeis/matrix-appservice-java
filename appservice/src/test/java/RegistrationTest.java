@@ -54,15 +54,15 @@ class RegistrationTest {
             Registration reg = RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration.yml").getFile());
 
             assertEquals(reg.getId(), "bigfakeid");
-            assertEquals(reg.getUrl(), "http://myappservice.net");
+            assertEquals(reg.getUrl(), "http://localhost");
             assertEquals(reg.getAsToken(), "secretappservicetoken");
             assertEquals(reg.getHsToken(), "secrethomeservertoken");
-            assertEquals(reg.getSenderLocalpart(), "@myappservice:myappservice.net");
+            assertEquals(reg.getSenderLocalpart(), "@myappservice:localhost");
 
             assertNotNull(reg.getNamespaces());
 
             assertEquals(reg.getNamespaces().rooms.length, 1);
-            assertEquals(reg.getNamespaces().rooms[0], "!aksjdflknwerqwer:myappservice.net");
+            assertEquals(reg.getNamespaces().rooms[0], "!aksjdflknwerqwer:localhost");
 
             assertEquals(reg.getNamespaces().aliases.size(), 1);
             assertFalse(reg.getNamespaces().aliases.get(0).exclusive);

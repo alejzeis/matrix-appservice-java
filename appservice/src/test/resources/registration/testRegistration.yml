@@ -1,8 +1,8 @@
 id: 'bigfakeid'
-url: 'http://myappservice.net'
+url: 'http://localhost'
 as_token: 'secretappservicetoken'
 hs_token: 'secrethomeservertoken'
-sender_localpart: '@myappservice:myappservice.net'
+sender_localpart: '@myappservice:localhost'
 namespaces:
   users:
     - exclusive: true
@@ -10,4 +10,4 @@ namespaces:
   aliases:
     - exclusive: false
       regex: '#!as_.*'
-  rooms: ['!aksjdflknwerqwer:myappservice.net']
+  rooms: ['!aksjdflknwerqwer:localhost']
