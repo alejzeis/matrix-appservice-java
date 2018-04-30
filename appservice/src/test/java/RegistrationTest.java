@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 import io.github.jython234.matrix.appservice.exception.KeyNotFoundException;
-import io.github.jython234.matrix.appservice.registration.Registration;
 import io.github.jython234.matrix.appservice.registration.RegistrationLoader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +50,7 @@ class RegistrationTest {
     @DisplayName("Load registration YAML test")
     void runLoadTest() throws IOException, KeyNotFoundException {
         try {
-            Registration reg = RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration.yml").getFile());
+            var reg = RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration.yml").getFile());
 
             assertEquals(reg.getId(), "bigfakeid");
             assertEquals(reg.getUrl(), "http://localhost");

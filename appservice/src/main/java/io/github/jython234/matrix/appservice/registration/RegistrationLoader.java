@@ -59,8 +59,8 @@ public class RegistrationLoader {
      */
     @SuppressWarnings("unchecked")
     public static Registration loadRegistrationFromFile(File file) throws KeyNotFoundException, FileNotFoundException {
-        Yaml yaml = new Yaml();
-        Registration reg = new Registration();
+        var yaml = new Yaml();
+        var reg = new Registration();
         reg.namespaces = new Registration.Namespaces();
 
         Map map = yaml.load(new FileInputStream(file));
@@ -70,23 +70,23 @@ public class RegistrationLoader {
         reg.asToken = (String) map.get("as_token");
         reg.hsToken = (String) map.get("hs_token");
         reg.senderLocalpart = (String) map.get("sender_localpart");
-        Map namespacesMap = (Map) map.get("namespaces");
+        var namespacesMap = (Map) map.get("namespaces");
 
         if(reg.id == null || reg.url == null || reg.asToken == null || reg.hsToken == null || reg.senderLocalpart == null
                 || namespacesMap == null) {
             throw new KeyNotFoundException("Failed to find all required keys in YAML file!");
         }
 
-        List<String> list = ((List<String>) namespacesMap.get("rooms"));
+        var list = ((List<String>) namespacesMap.get("rooms"));
         reg.namespaces.rooms = list.toArray(new String[0]);
         reg.namespaces.aliases = new ArrayList<>();
         reg.namespaces.users = new ArrayList<>();
 
-        List<Map> users = (List<Map>) namespacesMap.get("users");
-        List<Map> aliases = (List<Map>) namespacesMap.get("aliases");
+        var users = (List<Map>) namespacesMap.get("users");
+        var aliases = (List<Map>) namespacesMap.get("aliases");
 
         users.forEach((userNamespace) -> {
-            Registration.UserNamespace userSpace = new Registration.UserNamespace();
+            var userSpace = new Registration.UserNamespace();
             userSpace.exclusive = (boolean) userNamespace.get("exclusive");
             userSpace.regex = (String) userNamespace.get("regex");
 
@@ -94,7 +94,7 @@ public class RegistrationLoader {
         });
 
         aliases.forEach((aliasNamespace) -> {
-            Registration.AliasNamespace aliasSpace = new Registration.AliasNamespace();
+            var aliasSpace = new Registration.AliasNamespace();
             aliasSpace.exclusive = (boolean) aliasNamespace.get("exclusive");
             aliasSpace.regex = (String) aliasNamespace.get("regex");
 

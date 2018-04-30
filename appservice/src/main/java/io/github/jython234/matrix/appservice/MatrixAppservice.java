@@ -101,7 +101,7 @@ public class MatrixAppservice {
     private void loadRegistration(String registrationLocation) {
         this.logger.info("Loading registration file from: " + registrationLocation);
 
-        File location = new File(registrationLocation);
+        var location = new File(registrationLocation);
         try {
             this.registration = RegistrationLoader.loadRegistrationFromFile(location);
         } catch(FileNotFoundException e) {

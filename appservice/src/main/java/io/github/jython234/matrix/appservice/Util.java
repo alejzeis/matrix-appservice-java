@@ -6,7 +6,6 @@ import org.springframework.core.io.ResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class Util {
     private static ResourceLoader resourceLoader = new DefaultResourceLoader();
@@ -21,7 +20,7 @@ public class Util {
      *                     copy the file.
      */
     public static void copyResourceTo(String resource, File copyLocation) throws IOException {
-        InputStream in = resourceLoader.getResource(resource).getInputStream();
+        var in = resourceLoader.getResource(resource).getInputStream();
         FileUtils.copyInputStreamToFile(in, copyLocation);
     }
 }
