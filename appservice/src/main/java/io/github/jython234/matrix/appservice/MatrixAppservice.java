@@ -56,6 +56,7 @@ public class MatrixAppservice {
     public final Logger logger;
 
     private Registration registration;
+    private EventManager eventManager;
 
     /**
      * Only for Tests, do not USE!
@@ -64,6 +65,7 @@ public class MatrixAppservice {
         MatrixAppservice.INSTANCE = this;
 
         this.logger = LoggerFactory.getLogger("Appservice");
+        this.eventManager = new EventManager(this);
 
         this.loadRegistration("tmp/registration.yml");
     }
@@ -78,6 +80,7 @@ public class MatrixAppservice {
         MatrixAppservice.INSTANCE = this;
 
         this.logger = LoggerFactory.getLogger("Appservice");
+        this.eventManager = new EventManager(this);
 
         this.loadRegistration(registrationLocation);
     }
@@ -121,5 +124,13 @@ public class MatrixAppservice {
      */
     public Registration getRegistration() {
         return this.registration;
+    }
+
+    /**
+     * Get this appservice's EventManager.
+     * @return The EventManager of this appservice.
+     */
+    public EventManager getEventManager() {
+        return this.eventManager;
     }
 }

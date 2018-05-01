@@ -1,9 +1,16 @@
 package io.github.jython234.matrix.appservice.network;
 
 import io.github.jython234.matrix.appservice.MatrixAppservice;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * The main Spring Controller that handles
@@ -14,15 +21,26 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 public class RESTController {
+    private JSONParser parser = new JSONParser();
 
     @RequestMapping(value = "/transactions/{id}", method = RequestMethod.PUT)
     public ResponseEntity transactions(@PathVariable(value = "id") long id,
-                                       @RequestParam("access_token") String accessToken, @RequestBody String body) {
+                                       @RequestParam("access_token") String accessToken, @RequestBody String body, HttpServletRequest request) {
 
         if(!accessToken.equals(MatrixAppservice.getInstance().getRegistration().getHsToken()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
+        try {
+            JSONObject json = (JSONObject) this.parser.parse(body);
+            JSONArray transactions = (JSONArray) json.get("events");
+            //TODO: loop through transactions and fire events
+            // TODO: replace event managing system with simple method pointers in MatrixAppservice
+        } catch (ParseException e) {
+            MatrixAppservice.getInstance().logger.warn("Malformed JSON from " + request.getRemoteAddr());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errcode\":\"appservice.M_BAD_JSON\"}");
+        }
+
+        return ResponseEntity.ok("{}");
     }
 
     @RequestMapping(value = "/rooms/{alias}", method = RequestMethod.GET)

@@ -33,6 +33,8 @@ module io.github.jython234.matrix.appservice {
 
     requires commons.io;
 
+    requires json.simple;
+
     requires spring.beans;
     requires spring.core;
     requires spring.context;
@@ -41,7 +43,10 @@ module io.github.jython234.matrix.appservice {
     requires spring.boot;
     requires spring.boot.autoconfigure;
 
+    requires tomcat.embed.core;
+
     exports io.github.jython234.matrix.appservice;
+    exports io.github.jython234.matrix.appservice.event;
     exports io.github.jython234.matrix.appservice.exception;
     exports io.github.jython234.matrix.appservice.registration;
 }
