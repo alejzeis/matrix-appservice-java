@@ -1,7 +1,6 @@
 package io.github.jython234.matrix.appservice.network;
 
 import io.github.jython234.matrix.appservice.MatrixAppservice;
-import io.github.jython234.matrix.appservice.event.EventType;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

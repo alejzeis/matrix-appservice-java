@@ -7,13 +7,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class TypingMatrixEvent extends MatrixEvent {
+    public static final String TYPE = "m.typing";
+
     /**
      * List of Matrix User Ids that are typing.
      */
     public List<String> userIds;
 
     public TypingMatrixEvent() {
-        this.type = EventType.TYPING;
+        this.type = TYPE;
     }
 
     @Override

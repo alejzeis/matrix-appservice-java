@@ -9,7 +9,7 @@ import org.json.simple.JSONObject;
  * @author jython234
  */
 public class MatrixEvent {
-    public EventType type;
+    public String type;
 
     /**
      * Encodes this MatrixEvent into a JSONObject
@@ -19,7 +19,7 @@ public class MatrixEvent {
      */
     public JSONObject encode() {
         JSONObject root = new JSONObject();
-        root.put("type", this.type.asString());
+        root.put("type", this.type);
         return root;
     }
 
@@ -28,6 +28,6 @@ public class MatrixEvent {
      * @param object The JSONObject that has the encoded JSON.
      */
     public void decode(JSONObject object) {
-        this.type = EventType.valueOf((String) object.get("type"));
+        this.type = (String) object.get("type");
     }
 }

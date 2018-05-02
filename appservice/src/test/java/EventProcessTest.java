@@ -1,9 +1,6 @@
 import io.github.jython234.matrix.appservice.MatrixAppservice;
 import io.github.jython234.matrix.appservice.Util;
-import io.github.jython234.matrix.appservice.event.EventType;
-import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
-import io.github.jython234.matrix.appservice.network.RESTController;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterAll;
