@@ -26,6 +26,7 @@
  */
 package io.github.jython234.matrix.appservice;
 
+import io.github.jython234.matrix.appservice.event.EventHandler;
 import io.github.jython234.matrix.appservice.exception.KeyNotFoundException;
 import io.github.jython234.matrix.appservice.registration.Registration;
 import io.github.jython234.matrix.appservice.registration.RegistrationLoader;
@@ -56,7 +57,8 @@ public class MatrixAppservice {
     public final Logger logger;
 
     private Registration registration;
-    private EventManager eventManager;
+    private EventHandler eventHandler;
+
 
     /**
      * Only for Tests, do not USE!
@@ -65,7 +67,6 @@ public class MatrixAppservice {
         MatrixAppservice.INSTANCE = this;
 
         this.logger = LoggerFactory.getLogger("Appservice");
-        this.eventManager = new EventManager(this);
 
         this.loadRegistration("tmp/registration.yml");
     }
@@ -80,7 +81,6 @@ public class MatrixAppservice {
         MatrixAppservice.INSTANCE = this;
 
         this.logger = LoggerFactory.getLogger("Appservice");
-        this.eventManager = new EventManager(this);
 
         this.loadRegistration(registrationLocation);
     }
@@ -127,10 +127,18 @@ public class MatrixAppservice {
     }
 
     /**
-     * Get this appservice's EventManager.
-     * @return The EventManager of this appservice.
+     * Get this appservice's event handler.
+     * @return The EventHandler.
      */
-    public EventManager getEventManager() {
-        return this.eventManager;
+    public EventHandler getEventHandler() {
+        return this.eventHandler;
+    }
+
+    /**
+     * Set this appservice's event handler.
+     * @param e The EventHandler.
+     */
+    public void setEventHandler(EventHandler e) {
+        this.eventHandler = e;
     }
 }

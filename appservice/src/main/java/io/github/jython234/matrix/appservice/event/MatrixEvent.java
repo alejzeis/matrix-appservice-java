@@ -8,18 +8,26 @@ import org.json.simple.JSONObject;
  *
  * @author jython234
  */
-public abstract class MatrixEvent {
+public class MatrixEvent {
+    public EventType type;
+
     /**
      * Encodes this MatrixEvent into a JSONObject
      * the homeserver can understand.
      *
      * @return The encoded JSONObject.
      */
-    public abstract JSONObject encode();
+    public JSONObject encode() {
+        JSONObject root = new JSONObject();
+        root.put("type", this.type.asString());
+        return root;
+    }
 
     /**
      * Decodes this MatrixEvent from a JSONObject.
      * @param object The JSONObject that has the encoded JSON.
      */
-    public abstract void decode(JSONObject object);
+    public void decode(JSONObject object) {
+        this.type = EventType.valueOf((String) object.get("type"));
+    }
 }

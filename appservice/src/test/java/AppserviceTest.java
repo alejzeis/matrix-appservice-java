@@ -16,8 +16,6 @@ import java.io.IOException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -56,11 +54,22 @@ class AppserviceTest {
     void testBadToken() throws Exception {
         this.mockMvc.perform(
                 put("/transactions/123123123?access_token=badtoken")
-                .contentType("text/plain") // TODO: Provide JSON
-                .content("placeholdertext")
+                        .contentType("application/json")
+                        .content("{\"events\":[]}")
         ).andExpect(status().isForbidden());
         this.mockMvc.perform(get("/rooms/afakeroom?access_token=badtoken")).andExpect(status().isForbidden());
         this.mockMvc.perform(get("/users/afakeuser?access_token=badtoken")).andExpect(status().isForbidden());
+    }
+
+    @Test
+    void testCorrectToken() throws Exception {
+        this.mockMvc.perform(
+                put("/transactions/123123123?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())
+                        .contentType("application/json")
+                        .content("{\"events\":[]}")
+        ).andExpect(status().isOk());
+        this.mockMvc.perform(get("/rooms/afakeroom?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotImplemented());
+        this.mockMvc.perform(get("/users/afakeuser?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotImplemented());
     }
 
     @AfterAll

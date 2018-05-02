@@ -1,6 +1,8 @@
 package io.github.jython234.matrix.appservice.network;
 
 import io.github.jython234.matrix.appservice.MatrixAppservice;
+import io.github.jython234.matrix.appservice.event.EventType;
+import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,6 +26,7 @@ public class RESTController {
     private JSONParser parser = new JSONParser();
 
     @RequestMapping(value = "/transactions/{id}", method = RequestMethod.PUT)
+    @SuppressWarnings("unchecked")
     public ResponseEntity transactions(@PathVariable(value = "id") long id,
                                        @RequestParam("access_token") String accessToken, @RequestBody String body, HttpServletRequest request) {
 
@@ -33,8 +36,20 @@ public class RESTController {
         try {
             JSONObject json = (JSONObject) this.parser.parse(body);
             JSONArray transactions = (JSONArray) json.get("events");
-            //TODO: loop through transactions and fire events
-            // TODO: replace event managing system with simple method pointers in MatrixAppservice
+
+            for(var i = 0; i < transactions.size(); i++) {
+                JSONObject object = (JSONObject) parser.parse((String) transactions.get(i));
+                var event = new MatrixEvent();
+
+                switch ((String) object.get("type")) {
+                    default:
+                        event.decode(object);
+                        break;
+                }
+
+                // TODO: multi-thread event handling
+                MatrixAppservice.getInstance().getEventHandler().onMatrixEvent(event);
+            }
         } catch (ParseException e) {
             MatrixAppservice.getInstance().logger.warn("Malformed JSON from " + request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errcode\":\"appservice.M_BAD_JSON\"}");
