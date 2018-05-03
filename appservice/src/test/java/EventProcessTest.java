@@ -27,6 +27,8 @@
 import com.google.gson.Gson;
 import io.github.jython234.matrix.appservice.MatrixAppservice;
 import io.github.jython234.matrix.appservice.Util;
+import io.github.jython234.matrix.appservice.event.EventHandler;
+import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
@@ -75,21 +77,33 @@ public class EventProcessTest {
         event.content = new TypingMatrixEvent.Content();
         event.content.userIds = new String[]{"@fakeuser:fakeserver.net"};
 
-        // Setup our event handler to handle the event when we get it
-        MatrixAppservice.getInstance().setEventHandler(firedEvent -> {
-            LoggerFactory.getLogger("EventProcessTest").info("Got Event: " + firedEvent);
+        MatrixAppservice.getInstance().setEventHandler(new EventHandler() {
+            @Override
+            public void onMatrixEvent(MatrixEvent firedEvent) {
+                LoggerFactory.getLogger("EventProcessTest").info("Got Event: " + firedEvent);
 
-            assertTrue(firedEvent instanceof TypingMatrixEvent);
-            assertEquals(TypingMatrixEvent.TYPE, firedEvent.getType());
+                assertTrue(firedEvent instanceof TypingMatrixEvent);
+                assertEquals(TypingMatrixEvent.TYPE, firedEvent.getType());
 
-            var typingEvent = (TypingMatrixEvent) firedEvent;
-            assertEquals(event.roomId, typingEvent.roomId);
+                var typingEvent = (TypingMatrixEvent) firedEvent;
+                assertEquals(event.roomId, typingEvent.roomId);
 
-            assertNotNull(typingEvent.content);
-            assertNotNull(typingEvent.content.userIds);
+                assertNotNull(typingEvent.content);
+                assertNotNull(typingEvent.content.userIds);
 
-            assertEquals(event.content.userIds.length, typingEvent.content.userIds.length);
-            assertEquals(event.content.userIds[0], typingEvent.content.userIds[0]);
+                assertEquals(event.content.userIds.length, typingEvent.content.userIds.length);
+                assertEquals(event.content.userIds[0], typingEvent.content.userIds[0]);
+            }
+
+            @Override
+            public boolean onRoomAliasQueried(String alias) {
+                return false;
+            }
+
+            @Override
+            public void onRoomAliasCreated(String alias) {
+
+            }
         });
 
         // Serialize everything into JSON to be sent

@@ -39,4 +39,26 @@ public interface EventHandler {
      */
     void onMatrixEvent(MatrixEvent event);
 
+    /**
+     * Called when the homeserver queries the appservice
+     * for a room alias. This will then be called to determine if the room
+     * should be created or not.
+     *
+     * Once created if true, the <code>onRoomAliasCreated</code> method will be called.
+     *
+     * @param alias The room alias being queried
+     * @return If the room should be created or not. The library will handle creation of the room
+     *          if true.
+     */
+    boolean onRoomAliasQueried(String alias);
+
+    /**
+     * Called when the appservice creates a room
+     * in response to the <code>onRoomAliasQueried</code> method.
+     *
+     * @param alias The room alias that was created.
+     */
+    void onRoomAliasCreated(String alias);
+
+    //boolean onUserAliasQueried(String alias);
 }

@@ -29,7 +29,6 @@ package io.github.jython234.matrix.appservice.network;
 import com.google.gson.Gson;
 import io.github.jython234.matrix.appservice.MatrixAppservice;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
-import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -85,6 +84,12 @@ public class RESTController {
         if(!accessToken.equals(MatrixAppservice.getInstance().getRegistration().getHsToken()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
 
+        try {
+            // TODO: process event stub
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"message\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
+        }
+
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
     }
 
@@ -93,6 +98,12 @@ public class RESTController {
 
         if(!accessToken.equals(MatrixAppservice.getInstance().getRegistration().getHsToken()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
+
+        try {
+            // TODO: process event stub
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"message\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
+        }
 
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
     }
