@@ -34,6 +34,7 @@ module io.github.jython234.matrix.appservice {
     requires commons.io;
 
     requires json.simple;
+    requires gson;
 
     requires spring.beans;
     requires spring.core;

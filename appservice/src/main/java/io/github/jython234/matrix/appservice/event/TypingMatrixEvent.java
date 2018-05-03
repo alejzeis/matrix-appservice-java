@@ -1,41 +1,35 @@
 package io.github.jython234.matrix.appservice.event;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * Represents the "m.typing" matrix event.
+ *
+ * @author jython234
+ */
 public class TypingMatrixEvent extends MatrixEvent {
-    public static final String TYPE = "m.typing";
+    transient public static final String TYPE = "m.typing";
 
     /**
-     * List of Matrix User Ids that are typing.
+     * The room id of this event.
      */
-    public List<String> userIds;
+    @SerializedName("room_id")
+    public String roomId;
+
+    /**
+     * Event content
+     */
+    public Content content;
 
     public TypingMatrixEvent() {
         this.type = TYPE;
     }
 
-    @Override
-    public JSONObject encode() {
-        var object = super.encode();
-        var content = new JSONObject();
-
-        JSONArray array = new JSONArray();
-        array.addAll(this.userIds);
-        content.put("user_ids", array);
-
-        object.put("content", content);
-        return object;
-    }
-
-    @Override
-    public void decode(JSONObject object) {
-        super.decode(object);
-
-        JSONArray userIds = (JSONArray) ((JSONObject) object.get("content")).get("user_ids");
-        this.userIds = userIds;
+    public static class Content {
+        /**
+         * List of userIds that are typing
+         */
+        @SerializedName("user_ids")
+        public String[] userIds;
     }
 }

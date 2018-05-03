@@ -1,7 +1,9 @@
 package io.github.jython234.matrix.appservice.network;
 
+import com.google.gson.Gson;
 import io.github.jython234.matrix.appservice.MatrixAppservice;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
+import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -33,22 +35,16 @@ public class RESTController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
 
         try {
+            var gson = new Gson();
             JSONObject json = (JSONObject) this.parser.parse(body);
             JSONArray transactions = (JSONArray) json.get("events");
 
-            for(var i = 0; i < transactions.size(); i++) {
-                JSONObject object = (JSONObject) parser.parse((String) transactions.get(i));
-                var event = new MatrixEvent();
-
-                switch ((String) object.get("type")) {
-                    default:
-                        event.decode(object);
-                        break;
-                }
+            transactions.forEach((transaction) -> {
+                var eventWithType = gson.fromJson((String) transaction, MatrixEvent.class);
 
                 // TODO: multi-thread event handling
-                MatrixAppservice.getInstance().getEventHandler().onMatrixEvent(event);
-            }
+                MatrixAppservice.getInstance().getEventHandler().onMatrixEvent(EventDecoder.decodeEvent((String) transaction, eventWithType));
+            });
         } catch (ParseException e) {
             MatrixAppservice.getInstance().logger.warn("Malformed JSON from " + request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errcode\":\"appservice.M_BAD_JSON\"}");
