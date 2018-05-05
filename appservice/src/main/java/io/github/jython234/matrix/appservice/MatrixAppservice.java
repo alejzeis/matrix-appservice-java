@@ -34,6 +34,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,6 +49,8 @@ import java.io.FileNotFoundException;
  * @author jython234
  */
 @SpringBootApplication
+@EnableAsync
+@EnableScheduling
 public class MatrixAppservice {
     private static MatrixAppservice INSTANCE;
 
@@ -56,17 +61,31 @@ public class MatrixAppservice {
      */
     public final Logger logger;
 
+    public final ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    private String serverURL;
     private Registration registration;
     private EventHandler eventHandler;
-
 
     /**
      * Only for Tests, do not USE!
      */
     MatrixAppservice() {
-        MatrixAppservice.INSTANCE = this;
-
         this.logger = LoggerFactory.getLogger("Appservice");
+
+        if(MatrixAppservice.getInstance() != null) {
+            this.threadPoolTaskExecutor = null;
+            return;
+        }
+
+        this.threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        this.threadPoolTaskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+        this.threadPoolTaskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() * 2);
+        this.threadPoolTaskExecutor.setQueueCapacity(16);
+        this.threadPoolTaskExecutor.setThreadNamePrefix("AppWorker-");
+        this.threadPoolTaskExecutor.initialize();
+
+        MatrixAppservice.INSTANCE = this;
 
         this.loadRegistration("tmp/registration.yml");
     }
@@ -76,11 +95,20 @@ public class MatrixAppservice {
      * registration file.
      * @param registrationLocation The location of the registration YAML file the appservice
      *                             needs.
+     * @param serverURL The URL of the matrix homeserver.
      */
-    public MatrixAppservice(String registrationLocation) {
+    public MatrixAppservice(String registrationLocation, String serverURL) {
         MatrixAppservice.INSTANCE = this;
 
+        this.serverURL = serverURL;
         this.logger = LoggerFactory.getLogger("Appservice");
+
+        this.threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        this.threadPoolTaskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+        this.threadPoolTaskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() * 2);
+        this.threadPoolTaskExecutor.setQueueCapacity(16);
+        this.threadPoolTaskExecutor.setThreadNamePrefix("AppWorker-");
+        this.threadPoolTaskExecutor.initialize();
 
         this.loadRegistration(registrationLocation);
     }
@@ -96,9 +124,11 @@ public class MatrixAppservice {
     /**
      * Start the appservice and begin listening for
      * requests.
+     *
+     * @param args Command line arguments to pass to SpringBoot.
      */
-    public void run() {
-        SpringApplication.run(MatrixAppservice.class);
+    public void run(String[] args) {
+        SpringApplication.run(MatrixAppservice.class, args);
     }
 
     private void loadRegistration(String registrationLocation) {
@@ -116,6 +146,14 @@ public class MatrixAppservice {
             this.logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Get the server URL of the matrix homeserver.
+     * @return The server URL.
+     */
+    public String getServerURL() {
+        return this.serverURL;
     }
 
     /**

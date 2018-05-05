@@ -49,4 +49,16 @@ public class Util {
         var in = resourceLoader.getResource(resource).getInputStream();
         FileUtils.copyInputStreamToFile(in, copyLocation);
     }
+
+    /**
+     * Get an alias's localpart from the full alias.
+     *
+     * ex. <code>@fakeuser:fakedomain.net</code> would return <code>fakeuser</code>
+     * @param aliasFull The full alias of the room or user.
+     * @return The localpart of the room or user.
+     */
+    public static String getLocalpart(String aliasFull) {
+        var localpart = aliasFull.split(":")[0]; // Get rid of domain
+        return localpart.substring(1, localpart.length()); // Remove @ from beginning
+    }
 }

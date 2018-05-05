@@ -26,6 +26,8 @@
  */
 module io.github.jython234.matrix.appservice {
     requires java.base;
+    requires java.sql; // Needed for snakeyaml
+    requires jdk.incubator.httpclient;
 
     requires snakeyaml;
 
@@ -46,7 +48,10 @@ module io.github.jython234.matrix.appservice {
 
     requires tomcat.embed.core;
 
+    opens io.github.jython234.matrix.appservice to spring.core;
+
     exports io.github.jython234.matrix.appservice;
+    exports io.github.jython234.matrix.appservice.network;
     exports io.github.jython234.matrix.appservice.event;
     exports io.github.jython234.matrix.appservice.exception;
     exports io.github.jython234.matrix.appservice.registration;

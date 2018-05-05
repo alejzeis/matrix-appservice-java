@@ -49,6 +49,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 public class RESTController {
+    private Gson gson = new Gson();
     private JSONParser parser = new JSONParser();
 
     @RequestMapping(value = "/transactions/{id}", method = RequestMethod.PUT)
@@ -57,19 +58,17 @@ public class RESTController {
                                        @RequestParam("access_token") String accessToken, @RequestBody String body, HttpServletRequest request) {
 
         if(!accessToken.equals(MatrixAppservice.getInstance().getRegistration().getHsToken()))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"errcode\":\"appservice.M_FORBIDDEN\"}");
 
         try {
-            var gson = new Gson();
             JSONObject json = (JSONObject) this.parser.parse(body);
             JSONArray transactions = (JSONArray) json.get("events");
 
-            transactions.forEach((transaction) -> {
-                var eventWithType = gson.fromJson((String) transaction, MatrixEvent.class);
+            transactions.forEach((transaction) -> MatrixAppservice.getInstance().threadPoolTaskExecutor.submit(() -> {
+                var eventWithType = this.gson.fromJson(((JSONObject) transaction).toJSONString(), MatrixEvent.class);
 
-                // TODO: multi-thread event handling
-                MatrixAppservice.getInstance().getEventHandler().onMatrixEvent(EventDecoder.decodeEvent((String) transaction, eventWithType));
-            });
+                MatrixAppservice.getInstance().getEventHandler().onMatrixEvent(EventDecoder.decodeEvent((JSONObject) transaction, eventWithType));
+            }));
         } catch (ParseException e) {
             MatrixAppservice.getInstance().logger.warn("Malformed JSON from " + request.getRemoteAddr());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errcode\":\"appservice.M_BAD_JSON\"}");
@@ -82,27 +81,36 @@ public class RESTController {
     public ResponseEntity rooms(@PathVariable(value = "alias") String alias, @RequestParam("access_token") String accessToken) {
 
         if(!accessToken.equals(MatrixAppservice.getInstance().getRegistration().getHsToken()))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"errcode\":\"appservice.M_FORBIDDEN\"}");
 
         try {
-            // TODO: process event stub
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"message\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
-        }
+            var request = MatrixAppservice.getInstance().getEventHandler().onRoomAliasQueried(alias);
+            if(request != null) {
+                // We need to create the room
+                String id = NetworkUtil.createRoom(request);
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
+                MatrixAppservice.getInstance().logger.info("Created room: " + id);
+                MatrixAppservice.getInstance().threadPoolTaskExecutor.submit(() -> MatrixAppservice.getInstance().getEventHandler().onRoomAliasCreated(alias));
+
+                return ResponseEntity.ok("{}");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"errcode\":\"appservice.M_NOT_FOUND\"}");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"error\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
+        }
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public ResponseEntity users(@PathVariable(value = "id") String id, @RequestParam("access_token") String accessToken) {
 
         if(!accessToken.equals(MatrixAppservice.getInstance().getRegistration().getHsToken()))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid access token");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"errcode\":\"appservice.M_FORBIDDEN\"}");
 
         try {
             // TODO: process event stub
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"message\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"error\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
         }
 
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");

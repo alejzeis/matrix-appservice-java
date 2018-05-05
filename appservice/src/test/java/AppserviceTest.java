@@ -26,6 +26,9 @@
  */
 import io.github.jython234.matrix.appservice.MatrixAppservice;
 import io.github.jython234.matrix.appservice.Util;
+import io.github.jython234.matrix.appservice.event.EventHandler;
+import io.github.jython234.matrix.appservice.event.MatrixEvent;
+import io.github.jython234.matrix.appservice.network.CreateRoomRequest;
 import io.github.jython234.matrix.appservice.network.RESTController;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,8 +43,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -89,12 +94,31 @@ class AppserviceTest {
 
     @Test
     void testCorrectToken() throws Exception {
+        // Dummy EventHandler
+        MatrixAppservice.getInstance().setEventHandler(new EventHandler() {
+            @Override
+            public void onMatrixEvent(MatrixEvent event) {
+
+            }
+
+            @Override
+            public CreateRoomRequest onRoomAliasQueried(String alias) {
+                assertEquals("afakeroom", alias);
+                return null;
+            }
+
+            @Override
+            public void onRoomAliasCreated(String alias) {
+
+            }
+        });
+
         this.mockMvc.perform(
                 put("/transactions/123123123?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())
                         .contentType("application/json")
                         .content("{\"events\":[]}")
         ).andExpect(status().isOk());
-        this.mockMvc.perform(get("/rooms/afakeroom?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotImplemented());
+        this.mockMvc.perform(get("/rooms/afakeroom?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotFound()).andExpect(content().string("{\"errcode\":\"appservice.M_NOT_FOUND\"}"));
         this.mockMvc.perform(get("/users/afakeuser?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotImplemented());
     }
 

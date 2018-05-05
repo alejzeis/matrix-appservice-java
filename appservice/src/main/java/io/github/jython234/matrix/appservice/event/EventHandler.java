@@ -26,6 +26,8 @@
  */
 package io.github.jython234.matrix.appservice.event;
 
+import io.github.jython234.matrix.appservice.network.CreateRoomRequest;
+
 /**
  * Represents a Handler class that will handle managing
  * events pushed by the appservice library.
@@ -47,10 +49,10 @@ public interface EventHandler {
      * Once created if true, the <code>onRoomAliasCreated</code> method will be called.
      *
      * @param alias The room alias being queried
-     * @return If the room should be created or not. The library will handle creation of the room
-     *          if true.
+     * @return A <code>CreateRoomRequest</code> instance with options for the room if it to be created, or <code>null</code> if not.
+     *          The library will handle creation of the room if not null.
      */
-    boolean onRoomAliasQueried(String alias);
+    CreateRoomRequest onRoomAliasQueried(String alias);
 
     /**
      * Called when the appservice creates a room
