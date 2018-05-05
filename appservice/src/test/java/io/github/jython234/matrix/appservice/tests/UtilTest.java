@@ -1,3 +1,5 @@
+package io.github.jython234.matrix.appservice.tests;
+
 import io.github.jython234.matrix.appservice.Util;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-/*
+package io.github.jython234.matrix.appservice.tests.event;/*
  * Copyright © 2018, jython234
  * All rights reserved.
  *
@@ -81,7 +81,7 @@ public class EventProcessTest {
         MatrixAppservice.getInstance().setEventHandler(new EventHandler() {
             @Override
             public void onMatrixEvent(MatrixEvent firedEvent) {
-                LoggerFactory.getLogger("EventProcessTest").info("Got Event: " + firedEvent);
+                LoggerFactory.getLogger("event.EventProcessTest").info("Got Event: " + firedEvent);
 
                 assertTrue(firedEvent instanceof TypingMatrixEvent);
                 assertEquals(TypingMatrixEvent.TYPE, firedEvent.getType());

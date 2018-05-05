@@ -1,4 +1,4 @@
-/*
+package io.github.jython234.matrix.appservice.tests;/*
  * Copyright © 2018, jython234
  * All rights reserved.
  *
