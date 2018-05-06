@@ -24,11 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.github.jython234.matrix.appservice.network;
-
-import com.google.gson.annotations.SerializedName;
-
-final class CreateRoomResponse {
-    @SerializedName("room_id")
-    public String roomId;
-}
+/**
+ * Exception classes used by the appservice library.
+ */
+package io.github.jython234.matrix.appservice.exception;

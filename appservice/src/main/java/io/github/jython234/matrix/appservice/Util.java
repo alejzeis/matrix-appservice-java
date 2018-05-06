@@ -33,6 +33,11 @@ import org.springframework.core.io.ResourceLoader;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Misc. Utility methods used by the appservice.
+ *
+ * @author jython234
+ */
 public class Util {
     private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 

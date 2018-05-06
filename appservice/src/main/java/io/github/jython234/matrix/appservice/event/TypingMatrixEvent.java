@@ -51,6 +51,9 @@ public class TypingMatrixEvent extends MatrixEvent {
         this.type = TYPE;
     }
 
+    /**
+     * Content of the event.
+     */
     public static class Content {
         /**
          * List of userIds that are typing

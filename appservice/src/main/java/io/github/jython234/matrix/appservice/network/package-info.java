@@ -24,11 +24,9 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/**
+ * Network based classes. Most of these are internal and are hidden from view, except for the
+ * {@link io.github.jython234.matrix.appservice.network.CreateRoomRequest} class, which is used when
+ * handling an alias query from the homeserver.
+ */
 package io.github.jython234.matrix.appservice.network;
-
-import com.google.gson.annotations.SerializedName;
-
-final class CreateRoomResponse {
-    @SerializedName("room_id")
-    public String roomId;
-}

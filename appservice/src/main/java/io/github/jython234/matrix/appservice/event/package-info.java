@@ -24,11 +24,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.github.jython234.matrix.appservice.network;
-
-import com.google.gson.annotations.SerializedName;
-
-final class CreateRoomResponse {
-    @SerializedName("room_id")
-    public String roomId;
-}
+/**
+ * Contains event related classes, such as common Matrix Event implementations, and the
+ * {@link io.github.jython234.matrix.appservice.event.EventHandler} interface.
+ */
+package io.github.jython234.matrix.appservice.event;

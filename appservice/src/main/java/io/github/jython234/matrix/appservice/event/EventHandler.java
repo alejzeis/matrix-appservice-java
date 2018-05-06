@@ -46,7 +46,7 @@ public interface EventHandler {
      * for a room alias. This will then be called to determine if the room
      * should be created or not.
      *
-     * Once created if true, the <code>onRoomAliasCreated</code> method will be called.
+     * Once created if true, the {@link #onRoomAliasCreated(String)} method will be called.
      *
      * @param alias The room alias being queried
      * @return A <code>CreateRoomRequest</code> instance with options for the room if it to be created, or <code>null</code> if not.
