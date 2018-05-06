@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.jython234.matrix.appservice.event.message.MessageContent;
 import io.github.jython234.matrix.appservice.event.message.MessageContentDeserializer;
+import io.github.jython234.matrix.appservice.event.message.MessageContentSerializer;
 import io.github.jython234.matrix.appservice.event.message.MessageMatrixEvent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,12 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MessageEventTest {
+class MessageEventTest {
     private static Gson gson;
 
     @BeforeAll
     static void init() {
-        gson = new GsonBuilder().registerTypeAdapter(MessageContent.class, new MessageContentDeserializer()).create();
+        gson = new GsonBuilder()
+                .registerTypeAdapter(MessageContent.class, new MessageContentDeserializer())
+                .registerTypeAdapter(MessageContent.class, new MessageContentSerializer())
+                .create();
     }
 
     @Test
@@ -58,7 +62,55 @@ public class MessageEventTest {
 
         assertNotNull(eventMatrix.content);
         assertTrue(eventMatrix.content instanceof MessageContent.VideoMessageContent);
-        assertEquals("A Video", eventMatrix.content.body);
+        var content = (MessageContent.VideoMessageContent) eventMatrix.content;
 
+        assertEquals("A Video", content.body);
+        assertEquals("mxc://localhost/d230dASDFFxqpbQYZym562", content.url);
+
+        assertNotNull(content.info);
+        assertEquals(12341234, content.info.duration);
+        assertEquals(240, content.info.height);
+        assertEquals(480, content.info.width);
+        assertEquals("video/mp4", content.info.mimetype);
+        assertEquals(234234, content.info.size);
+        assertEquals("mxc://localhost/vvhOpdygXyonDWhikuxZjjhx", content.info.thumbnailUrl);
+
+        assertNotNull(content.info.thumbnailInfo);
+        assertEquals(300, content.info.thumbnailInfo.height);
+        assertEquals(240, content.info.thumbnailInfo.width);
+        assertEquals("image/jpeg", content.info.thumbnailInfo.mimetype);
+        assertEquals(123124, content.info.thumbnailInfo.size);
+    }
+
+    @Test
+    void encodeTest() {
+        var event = new MessageMatrixEvent();
+        event.sender = "@fakeuser:fakeserver.net";
+        event.eventId = "$12341234w52dsaf:fakeserver.net";
+        event.roomId = "!XqBunHwQIXUiqCaoxq:fakeserver.net";
+
+        var content = new MessageContent.VideoMessageContent();
+        content.body = "A video";
+        content.url = "mxc://localhost/afakeurl";
+
+        content.info = new MessageContent.VideoMessageContent.Info();
+        content.info.width = 240;
+        content.info.height = 480;
+        content.info.duration = 12341234;
+        content.info.mimetype = "video/mp4";
+        content.info.size = 5235123;
+        content.info.thumbnailUrl = "mxc://localhost/afakeurl2";
+        content.info.thumbnailInfo = new MessageContent.ThumbnailInfo();
+        content.info.thumbnailInfo.mimetype = "image/jpeg";
+        content.info.thumbnailInfo.height = 300;
+        content.info.thumbnailInfo.width = 240;
+        content.info.thumbnailInfo.size = 123124;
+
+        event.content = content;
+
+        var json = gson.toJson(event);
+        var expected = "{\"room_id\":\"!XqBunHwQIXUiqCaoxq:fakeserver.net\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$12341234w52dsaf:fakeserver.net\",\"content\":{\"url\":\"mxc://localhost/afakeurl\",\"info\":{\"duration\":12341234,\"h\":480,\"w\":240,\"mimetype\":\"video/mp4\",\"size\":5235123,\"thumbnail_info\":{\"h\":300,\"w\":240,\"mimetype\":\"image/jpeg\",\"size\":123124},\"thumbnail_url\":\"mxc://localhost/afakeurl2\"},\"body\":\"A video\",\"msgtype\":\"m.video\"},\"type\":\"m.message\"}";
+
+        assertEquals(expected, json);
     }
 }

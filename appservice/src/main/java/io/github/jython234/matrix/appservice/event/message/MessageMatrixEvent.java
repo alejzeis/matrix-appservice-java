@@ -12,14 +12,23 @@ import io.github.jython234.matrix.appservice.event.MatrixEvent;
 public class MessageMatrixEvent extends MatrixEvent {
     transient public static final String TYPE = "m.message";
 
+    /**
+     * The Matrix Room ID of the room this message was in
+     */
     @SerializedName("room_id")
     public String roomId;
 
+    /**
+     * The sender of the message
+     */
     public String sender;
 
     @SerializedName("event_id")
     public String eventId;
 
+    /**
+     * The Message content.
+     */
     public MessageContent content;
 
     public MessageMatrixEvent() {

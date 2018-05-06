@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.RawMatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
+import io.github.jython234.matrix.appservice.event.message.MessageMatrixEvent;
 import org.json.simple.JSONObject;
 
 final class EventDecoder {
@@ -39,6 +40,8 @@ final class EventDecoder {
         switch (eventWithType.getType()) {
             case TypingMatrixEvent.TYPE:
                 return gson.fromJson(json.toJSONString(), TypingMatrixEvent.class);
+            case MessageMatrixEvent.TYPE:
+                return gson.fromJson(json.toJSONString(), MessageMatrixEvent.class);
             default:
                 return new RawMatrixEvent(json);
         }

@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = MatrixAppservice.class)
 @AutoConfigureMockMvc
-public class EventProcessTest {
+class EventProcessTest {
     private static File registrationFile;
 
     @Autowired private MockMvc mockMvc;
