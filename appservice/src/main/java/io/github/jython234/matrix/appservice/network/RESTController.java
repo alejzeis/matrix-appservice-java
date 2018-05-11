@@ -97,6 +97,7 @@ public class RESTController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"errcode\":\"appservice.M_NOT_FOUND\"}");
             }
         } catch (Exception e) {
+            MatrixAppservice.getInstance().logger.warn("While processing room alias: " + e.getClass().getName() + ": " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"error\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
         }
     }
@@ -119,6 +120,7 @@ public class RESTController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"errcode\":\"appservice.M_NOT_FOUND\"}");
             }
         } catch (Exception e) {
+            MatrixAppservice.getInstance().logger.warn("While processing user alias: " + e.getClass().getName() + ": " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"error\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
         }
     }

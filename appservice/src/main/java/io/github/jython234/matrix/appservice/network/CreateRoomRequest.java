@@ -47,7 +47,9 @@ public final class CreateRoomRequest {
     public String visibility = "public";
 
     /**
-     * The alias for the room. THIS MUST BE SET!
+     * The alias LOCALPART for the room. THIS MUST BE SET!
+     *
+     * @see io.github.jython234.matrix.appservice.Util#getLocalpart(String)
      */
     @SerializedName("room_alias_name")
     public String roomAliasName;

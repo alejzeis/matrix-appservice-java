@@ -13,6 +13,8 @@ import org.springframework.lang.Nullable;
 public final class CreateUserRequest {
     /**
      * The Matrix User's localpart, ex. "fakeuser" would be "@fakeuser:fakeserver.com"
+     *
+     * @see io.github.jython234.matrix.appservice.Util#getLocalpart(String)
      */
     public String localpart;
     /**

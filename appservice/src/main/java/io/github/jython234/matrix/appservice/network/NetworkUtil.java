@@ -51,7 +51,7 @@ class NetworkUtil {
 
         var response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandler.asString());
         if(response.statusCode() != HttpStatus.OK.value())
-            throw new RuntimeException("Received non-200 status code while attempting to create room.");
+            throw new RuntimeException("Received non-200 status code while attempting to create room. (got " + response.statusCode() + ")");
 
         var responseJSON = gson.fromJson(response.body(), CreateRoomResponse.class);
 
@@ -69,7 +69,7 @@ class NetworkUtil {
 
         var response = HttpClient.newBuilder().build().send(request, HttpResponse.BodyHandler.asString());
         if(response.statusCode() != HttpStatus.OK.value())
-            throw new RuntimeException("Received non-200 status code while attempting to provision user.");
+            throw new RuntimeException("Received non-200 status code while attempting to provision user. (got " + response.statusCode() + ")");
 
         var responseJSON = gson.fromJson(response.body(), CreateUserRequest.CreateUserResponseJSON.class);
 
@@ -102,7 +102,7 @@ class NetworkUtil {
 
     @SuppressWarnings("unchecked")
     private static void setUserDisplayName(String userId, String displayname) throws Exception {
-        var uri = new URI(MatrixAppservice.getInstance().getServerURL() + "/_matrix/client/r0/profile/" + userId + "/displayname?access_token=" + MatrixAppservice.getInstance().getRegistration().getAsToken());
+        var uri = new URI(MatrixAppservice.getInstance().getServerURL() + "/_matrix/client/r0/profile/" + userId + "/displayname?access_token=" + MatrixAppservice.getInstance().getRegistration().getAsToken() + "&user_id=" + userId);
 
         JSONObject root =  new JSONObject();
         root.put("displayname", displayname);
@@ -119,7 +119,7 @@ class NetworkUtil {
 
     @SuppressWarnings("unchecked")
     private static void setUserAvatarURL(String userId, String avatarURL) throws Exception {
-        var uri = new URI(MatrixAppservice.getInstance().getServerURL() + "/_matrix/client/r0/profile/" + userId + "/avatar_url?access_token=" + MatrixAppservice.getInstance().getRegistration().getAsToken());
+        var uri = new URI(MatrixAppservice.getInstance().getServerURL() + "/_matrix/client/r0/profile/" + userId + "/avatar_url?access_token=" + MatrixAppservice.getInstance().getRegistration().getAsToken() + "&user_id=" + userId);
 
         JSONObject root =  new JSONObject();
         root.put("avatar_url", avatarURL);
