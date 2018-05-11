@@ -31,6 +31,7 @@ import io.github.jython234.matrix.appservice.event.EventHandler;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
 import io.github.jython234.matrix.appservice.network.CreateRoomRequest;
+import io.github.jython234.matrix.appservice.network.CreateUserRequest;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterAll;
@@ -102,8 +103,8 @@ class EventProcessTest {
             }
 
             @Override
-            public void onRoomAliasCreated(String alias) {
-
+            public CreateUserRequest onUserAliasQueried(String alias) {
+                return null;
             }
         });
 

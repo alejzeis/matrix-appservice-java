@@ -34,7 +34,7 @@ import com.google.gson.annotations.SerializedName;
  * query to the appservice.
  *
  * @author jython234
- * @see <a href="https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-createroom">Specification</a>
+ * @see <a href="https://matrix.org/docs/spec/client_server/r0.3.0.html#post-matrix-client-r0-createroom">Matrix Specification</a>
  */
 public final class CreateRoomRequest {
     /**
@@ -59,5 +59,5 @@ public final class CreateRoomRequest {
     /**
      * The room's topic.
      */
-    public String topic;
+    public String topic = "";
 }

@@ -29,6 +29,7 @@ import io.github.jython234.matrix.appservice.Util;
 import io.github.jython234.matrix.appservice.event.EventHandler;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.network.CreateRoomRequest;
+import io.github.jython234.matrix.appservice.network.CreateUserRequest;
 import io.github.jython234.matrix.appservice.network.RESTController;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -108,8 +109,9 @@ class AppserviceTest {
             }
 
             @Override
-            public void onRoomAliasCreated(String alias) {
-
+            public CreateUserRequest onUserAliasQueried(String alias) {
+                assertEquals("afakeuser", alias);
+                return null;
             }
         });
 
@@ -118,8 +120,13 @@ class AppserviceTest {
                         .contentType("application/json")
                         .content("{\"events\":[]}")
         ).andExpect(status().isOk());
-        this.mockMvc.perform(get("/rooms/afakeroom?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotFound()).andExpect(content().string("{\"errcode\":\"appservice.M_NOT_FOUND\"}"));
-        this.mockMvc.perform(get("/users/afakeuser?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken())).andExpect(status().isNotImplemented());
+
+        this.mockMvc.perform(get("/rooms/afakeroom?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("{\"errcode\":\"appservice.M_NOT_FOUND\"}"));
+        this.mockMvc.perform(get("/users/afakeuser?access_token=" + MatrixAppservice.getInstance().getRegistration().getHsToken()))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("{\"errcode\":\"appservice.M_NOT_FOUND\"}"));
     }
 
     @AfterAll

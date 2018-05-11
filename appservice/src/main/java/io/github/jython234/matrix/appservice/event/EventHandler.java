@@ -27,6 +27,7 @@
 package io.github.jython234.matrix.appservice.event;
 
 import io.github.jython234.matrix.appservice.network.CreateRoomRequest;
+import io.github.jython234.matrix.appservice.network.CreateUserRequest;
 
 /**
  * Represents a Handler class that will handle managing
@@ -49,18 +50,35 @@ public interface EventHandler {
      * Once created if true, the {@link #onRoomAliasCreated(String)} method will be called.
      *
      * @param alias The room alias being queried
-     * @return A <code>CreateRoomRequest</code> instance with options for the room if it to be created, or <code>null</code> if not.
+     * @return A {@link CreateRoomRequest} instance with options for the room if it to be created, or <code>null</code> if not.
      *          The library will handle creation of the room if not null.
      */
     CreateRoomRequest onRoomAliasQueried(String alias);
 
     /**
      * Called when the appservice creates a room
-     * in response to the <code>onRoomAliasQueried</code> method.
+     * in response to the {@link #onRoomAliasQueried(String)} method.
      *
      * @param alias The room alias that was created.
      */
-    void onRoomAliasCreated(String alias);
+    default void onRoomAliasCreated(String alias) { }
 
-    //boolean onUserAliasQueried(String alias);
+    /**
+     * Called when the homeserver queries the appservice for a user.
+     * This will be called to determine if the user should be provisioned or not.
+     *
+     * @param alias The Matrix User's ID
+     * @return A {@link CreateUserRequest} instance with parameters for the new user if it is to be created, or <code>null</code> if not.
+     *          The library will handle provisioning the user if not null.
+     */
+    CreateUserRequest onUserAliasQueried(String alias);
+
+    /**
+     * Called when the appservice provisions a user in response
+     * to the {@link #onUserAliasQueried(String)} method.
+     *
+     * @param localpart The Matrix User's localpart.
+     */
+    default void onUserProvisioned(String localpart) { }
+
 }

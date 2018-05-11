@@ -108,11 +108,18 @@ public class RESTController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"errcode\":\"appservice.M_FORBIDDEN\"}");
 
         try {
-            // TODO: process event stub
+            var request = MatrixAppservice.getInstance().getEventHandler().onUserAliasQueried(id);
+            if(request != null) {
+                String userId = NetworkUtil.createUser(request);
+
+                MatrixAppservice.getInstance().logger.info("Provisioned user (stage 1): " + userId);
+
+                return ResponseEntity.ok("{}");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"errcode\":\"appservice.M_NOT_FOUND\"}");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errcode\":\"appservice.M_UNKNOWN\", \"error\": \"" + e.getClass().getName() + ": " + e.getMessage() + "\"}");
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
     }
 }
