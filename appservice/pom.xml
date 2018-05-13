@@ -40,6 +40,13 @@
     <artifactId>appservice</artifactId>
     <packaging>jar</packaging>
 
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Spring Stuff -->
         <dependency>

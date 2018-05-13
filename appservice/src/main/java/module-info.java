@@ -29,12 +29,6 @@
  * Contains a bare-bones implementation of a Matrix appservice,
  * along with some helper utilities such as deserialization and serialization
  * of common matrix events to and from JSON.
- *
- * <br>
- *
- * The <code>bridge</code> module builds
- * off this module and provides a more friendly interface for those implementing matrix
- * bridges.
  */
 module io.github.jython234.matrix.appservice {
     requires java.base;
