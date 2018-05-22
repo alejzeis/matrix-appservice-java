@@ -31,6 +31,8 @@ import org.springframework.lang.NonNull;
 
 /**
  * Represents an "m.room.member" Matrix event.
+ *
+ * @author jython234
  */
 public class RoomMemberMatrixEvent extends MatrixEvent {
     transient public static final String TYPE = "m.room.member";
@@ -56,6 +58,10 @@ public class RoomMemberMatrixEvent extends MatrixEvent {
      * The Event content.
      */
     @NonNull public Content content;
+
+    public RoomMemberMatrixEvent() {
+        this.type = TYPE;
+    }
 
     /**
      * Represents the "content" field of the event.

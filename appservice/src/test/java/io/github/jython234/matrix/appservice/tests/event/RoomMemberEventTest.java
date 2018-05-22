@@ -64,6 +64,7 @@ class RoomMemberEventTest {
 
         RoomMemberMatrixEvent eventMatrix = gson.fromJson(event, RoomMemberMatrixEvent.class);
 
+        assertEquals(RoomMemberMatrixEvent.TYPE, eventMatrix.getType());
         assertEquals("!SABnCBIIqUARlcXYsy:localmatrix", eventMatrix.roomId);
         assertEquals("@fakeuser:fakeserver.net", eventMatrix.sender);
         assertEquals("$152607294010wXXPo:fakeserver.net", eventMatrix.eventId);
