@@ -48,14 +48,14 @@ class RedactionMatrixEventTest {
         RedactionMatrixEvent event = new RedactionMatrixEvent();
         event.sender = "@redactinguser:fakeserver.net";
         event.roomId = "!fakeroom:fakeserver.net";
-        event.eventId = "$ekq45QxM5qpEkfj9:fakeserver.net";
+        event.id = "$ekq45QxM5qpEkfj9:fakeserver.net";
         event.redactedEvent = "$d24g6R7wRf652AxN:fakeserver.net";
 
         event.content = new RedactionMatrixEvent.Content();
         event.content.reason = "No reason.";
 
 
-        assertEquals("{\"room_id\":\"!fakeroom:fakeserver.net\",\"sender\":\"@redactinguser:fakeserver.net\",\"event_id\":\"$ekq45QxM5qpEkfj9:fakeserver.net\",\"redacts\":\"$d24g6R7wRf652AxN:fakeserver.net\",\"content\":{\"reason\":\"No reason.\"},\"type\":\"m.room.redaction\"}",
+        assertEquals("{\"redacts\":\"$d24g6R7wRf652AxN:fakeserver.net\",\"content\":{\"reason\":\"No reason.\"},\"room_id\":\"!fakeroom:fakeserver.net\",\"sender\":\"@redactinguser:fakeserver.net\",\"event_id\":\"$ekq45QxM5qpEkfj9:fakeserver.net\",\"type\":\"m.room.redaction\"}",
                 gson.toJson(event));
     }
 
@@ -78,7 +78,7 @@ class RedactionMatrixEventTest {
 
         assertEquals(RedactionMatrixEvent.TYPE, eventMatrix.getType());
         assertEquals("@redactinguser:fakeserver.net", eventMatrix.sender);
-        assertEquals("$15269544431jHMeV:fakeserver.net", eventMatrix.eventId);
+        assertEquals("$15269544431jHMeV:fakeserver.net", eventMatrix.id);
         assertEquals("$15269544390zubGQ:fakserver.net", eventMatrix.redactedEvent);
         assertEquals("!SABnCBIIqUARlcXYsy:fakeserver.net", eventMatrix.roomId);
 

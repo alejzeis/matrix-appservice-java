@@ -34,25 +34,8 @@ import org.springframework.lang.Nullable;
  *
  * @author jython234
  */
-public class RedactionMatrixEvent extends MatrixEvent {
+public class RedactionMatrixEvent extends RoomEvent {
     transient public static final String TYPE = "m.room.redaction";
-
-    /**
-     * The Matrix Room ID of the room this redaction was in.
-     */
-    @SerializedName("room_id")
-    public String roomId;
-
-    /**
-     * The user who redacted the event.
-     */
-    public String sender;
-
-    /**
-     * This is NOT the ID of the event that was redacted!
-     */
-    @SerializedName("event_id")
-    public String eventId;
 
     /**
      * The event ID of the event that was redacted.

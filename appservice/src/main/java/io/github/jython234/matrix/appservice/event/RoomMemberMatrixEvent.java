@@ -34,23 +34,15 @@ import org.springframework.lang.NonNull;
  *
  * @author jython234
  */
-public class RoomMemberMatrixEvent extends MatrixEvent {
+public class RoomMemberMatrixEvent extends RoomEvent {
     transient public static final String TYPE = "m.room.member";
 
     /**
-     * The Matrix Room ID of the room this event was in.
+     * Represents the user this member action is being preformed upon.
+     * See {@link Content.Membership} for more information.
+     *
+     * @see Content.Membership
      */
-    @SerializedName("room_id")
-    public String roomId;
-
-    /**
-     * The sender of the message.
-     */
-    public String sender;
-
-    @SerializedName("event_id")
-    public String eventId;
-
     @SerializedName("state_key")
     @NonNull public String stateKey;
 

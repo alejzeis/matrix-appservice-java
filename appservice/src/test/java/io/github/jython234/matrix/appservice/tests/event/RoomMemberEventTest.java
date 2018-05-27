@@ -67,7 +67,7 @@ class RoomMemberEventTest {
         assertEquals(RoomMemberMatrixEvent.TYPE, eventMatrix.getType());
         assertEquals("!SABnCBIIqUARlcXYsy:localmatrix", eventMatrix.roomId);
         assertEquals("@fakeuser:fakeserver.net", eventMatrix.sender);
-        assertEquals("$152607294010wXXPo:fakeserver.net", eventMatrix.eventId);
+        assertEquals("$152607294010wXXPo:fakeserver.net", eventMatrix.id);
         assertEquals("@inviteduser:fakeserver.net", eventMatrix.stateKey);
 
         assertNotNull(eventMatrix.content);
@@ -80,7 +80,7 @@ class RoomMemberEventTest {
         eventMatrix.content.isDirect = true;
 
 
-        assertEquals("{\"room_id\":\"!SABnCBIIqUARlcXYsy:localmatrix\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$152607294010wXXPo:fakeserver.net\",\"state_key\":\"@inviteduser:fakeserver.net\",\"content\":{\"avatarURL\":\"mxc://fakeURL/qwerty\",\"displayname\":\"Invited User\",\"membership\":\"invite\",\"isDirect\":true},\"type\":\"m.room.member\"}",
+        assertEquals("{\"state_key\":\"@inviteduser:fakeserver.net\",\"content\":{\"avatarURL\":\"mxc://fakeURL/qwerty\",\"displayname\":\"Invited User\",\"membership\":\"invite\",\"isDirect\":true},\"room_id\":\"!SABnCBIIqUARlcXYsy:localmatrix\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$152607294010wXXPo:fakeserver.net\",\"type\":\"m.room.member\"}",
                 gson.toJson(eventMatrix));
     }
 }

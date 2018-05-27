@@ -84,7 +84,7 @@ class MessageEventTest {
 
         assertEquals("!bdcFmnylWSoSUllTqx:fakeserver.net", eventMatrix.roomId);
         assertEquals("@fakeuser:fakeserver.net", eventMatrix.sender);
-        assertEquals("$143273582443PhrSn:fakeserver.net", eventMatrix.eventId);
+        assertEquals("$143273582443PhrSn:fakeserver.net", eventMatrix.id);
 
         assertNotNull(eventMatrix.content);
         assertTrue(eventMatrix.content instanceof MessageContent.VideoMessageContent);
@@ -112,7 +112,7 @@ class MessageEventTest {
     void encodeTest() {
         var event = new MessageMatrixEvent();
         event.sender = "@fakeuser:fakeserver.net";
-        event.eventId = "$12341234w52dsaf:fakeserver.net";
+        event.id = "$12341234w52dsaf:fakeserver.net";
         event.roomId = "!XqBunHwQIXUiqCaoxq:fakeserver.net";
 
         var content = new MessageContent.VideoMessageContent();
@@ -135,7 +135,7 @@ class MessageEventTest {
         event.content = content;
 
         var json = gson.toJson(event);
-        var expected = "{\"room_id\":\"!XqBunHwQIXUiqCaoxq:fakeserver.net\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$12341234w52dsaf:fakeserver.net\",\"content\":{\"url\":\"mxc://localhost/afakeurl\",\"info\":{\"duration\":12341234,\"h\":480,\"w\":240,\"mimetype\":\"video/mp4\",\"size\":5235123,\"thumbnail_info\":{\"h\":300,\"w\":240,\"mimetype\":\"image/jpeg\",\"size\":123124},\"thumbnail_url\":\"mxc://localhost/afakeurl2\"},\"body\":\"A video\",\"msgtype\":\"m.video\"},\"type\":\"m.message\"}";
+        var expected = "{\"content\":{\"url\":\"mxc://localhost/afakeurl\",\"info\":{\"duration\":12341234,\"h\":480,\"w\":240,\"mimetype\":\"video/mp4\",\"size\":5235123,\"thumbnail_info\":{\"h\":300,\"w\":240,\"mimetype\":\"image/jpeg\",\"size\":123124},\"thumbnail_url\":\"mxc://localhost/afakeurl2\"},\"body\":\"A video\",\"msgtype\":\"m.video\"},\"room_id\":\"!XqBunHwQIXUiqCaoxq:fakeserver.net\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$12341234w52dsaf:fakeserver.net\",\"type\":\"m.message\"}";
 
         assertEquals(expected, json);
     }
