@@ -45,9 +45,7 @@ class RedactionMatrixEventTest {
     @Test
     void encodeTest() {
         RedactionMatrixEvent event = new RedactionMatrixEvent();
-        event.sender = "@redactinguser:fakeserver.net";
-        event.roomId = "!SABnCBIIqUARlcXYsy:fakeserver.net";
-        event.id = "$15269544431jHMeV:fakeserver.net";
+        Constants.setRoomEventDefaults(event);
         event.redactedEvent = "$15269544390zubGQ:fakserver.net";
 
         event.content = new RedactionMatrixEvent.Content();
@@ -60,15 +58,15 @@ class RedactionMatrixEventTest {
     void decodeTest() {
         testDecode("{\n" +
                 "      \"origin_server_ts\": 1526954443397,\n" +
-                "      \"sender\": \"@redactinguser:fakeserver.net\",\n" +
-                "      \"event_id\": \"$15269544431jHMeV:fakeserver.net\",\n" +
+                "      \"sender\": \"" + Constants.sender + "\",\n" +
+                "      \"event_id\": \"" + Constants.id + "\",\n" +
                 "      \"unsigned\": {\n" +
                 "        \"age\": 96\n" +
                 "      },\n" +
                 "      \"content\": {\"reason\":\"No reason.\"},\n" +
                 "      \"redacts\": \"$15269544390zubGQ:fakserver.net\",\n" +
                 "      \"type\": \"m.room.redaction\",\n" +
-                "      \"room_id\": \"!SABnCBIIqUARlcXYsy:fakeserver.net\"\n" +
+                "      \"room_id\": \"" + Constants.roomId + "\"\n" +
                 "}");
     }
 
@@ -76,10 +74,9 @@ class RedactionMatrixEventTest {
         RedactionMatrixEvent eventMatrix = gson.fromJson(event, RedactionMatrixEvent.class);
 
         assertEquals(RedactionMatrixEvent.TYPE, eventMatrix.getType());
-        assertEquals("@redactinguser:fakeserver.net", eventMatrix.sender);
-        assertEquals("$15269544431jHMeV:fakeserver.net", eventMatrix.id);
+        Constants.checkRoomEventDefaults(eventMatrix);
+
         assertEquals("$15269544390zubGQ:fakserver.net", eventMatrix.redactedEvent);
-        assertEquals("!SABnCBIIqUARlcXYsy:fakeserver.net", eventMatrix.roomId);
 
         assertNotNull(eventMatrix.content);
         assertEquals("No reason.", eventMatrix.content.reason);

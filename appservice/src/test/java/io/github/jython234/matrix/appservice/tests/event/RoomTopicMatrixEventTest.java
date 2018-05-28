@@ -27,15 +27,14 @@
 package io.github.jython234.matrix.appservice.tests.event;
 
 import com.google.gson.Gson;
-import io.github.jython234.matrix.appservice.event.room.RoomMemberMatrixEvent;
-import org.junit.jupiter.api.Test;
+import io.github.jython234.matrix.appservice.event.room.RoomTopicMatrixEvent;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class RoomMemberEventTest {
+class RoomTopicMatrixEventTest {
     private static Gson gson;
 
     @BeforeAll
@@ -45,16 +44,11 @@ class RoomMemberEventTest {
 
     @Test
     void encodeTest() {
-        RoomMemberMatrixEvent event = new RoomMemberMatrixEvent();
-
+        RoomTopicMatrixEvent event = new RoomTopicMatrixEvent();
         Constants.setRoomEventDefaults(event);
-        event.stateKey = "@inviteduser:fakeserver.net";
 
-        event.content = new RoomMemberMatrixEvent.Content();
-        event.content.membership = RoomMemberMatrixEvent.Content.Membership.INVITE;
-        event.content.avatarURL = "mxc://fakeURL/qwerty";
-        event.content.displayname = "Invited User";
-        event.content.isDirect = true;
+        event.content = new RoomTopicMatrixEvent.Content();
+        event.content.topic = "A topic.";
 
         testDecode(gson.toJson(event));
     }
@@ -62,37 +56,24 @@ class RoomMemberEventTest {
     @Test
     void decodeTest() {
         testDecode("{\n" +
-                "  \"origin_server_ts\": 1526072940657,\n" +
-                "  \"sender\": \"" + Constants.sender + "\",\n" +
-                "  \"event_id\": \"" + Constants.id + "\",\n" +
-                "  \"unsigned\": {\n" +
-                "    \"age\": 59\n" +
-                "  },\n" +
-                "  \"state_key\": \"@inviteduser:fakeserver.net\",\n" +
-                "  \"content\": {\n" +
-                "    \"membership\": \"invite\",\n" +
-                "    \"avatarURL\": \"mxc://fakeURL/qwerty\",\n" +
-                "    \"displayname\": \"Invited User\",\n" +
-                "    \"is_direct\": true\n" +
-                "  },\n" +
-                "  \"membership\": \"invite\",\n" +
-                "  \"type\": \"m.room.member\",\n" +
-                "  \"room_id\": \"" + Constants.roomId + "\"\n" +
+                "    \"age\": 231345,\n" +
+                "    \"content\": {\n" +
+                "        \"topic\": \"A topic.\"\n" +
+                "    },\n" +
+                "    \"event_id\": \"" + Constants.id + "\",\n" +
+                "    \"origin_server_ts\": 1527470226586,\n" +
+                "    \"room_id\": \"" + Constants.roomId + "\",\n" +
+                "    \"sender\": \"" + Constants.sender + "\",\n" +
+                "    \"state_key\": \"\",\n" +
+                "    \"type\": \"m.room.topic\"\n" +
                 "}");
     }
 
     private void testDecode(String event) {
-        RoomMemberMatrixEvent eventMatrix = gson.fromJson(event, RoomMemberMatrixEvent.class);
+        RoomTopicMatrixEvent matrixEvent = gson.fromJson(event, RoomTopicMatrixEvent.class);
+        Constants.checkRoomEventDefaults(matrixEvent);
 
-        assertEquals(RoomMemberMatrixEvent.TYPE, eventMatrix.getType());
-
-        Constants.checkRoomEventDefaults(eventMatrix);
-        assertEquals("@inviteduser:fakeserver.net", eventMatrix.stateKey);
-
-        assertNotNull(eventMatrix.content);
-        assertEquals(RoomMemberMatrixEvent.Content.Membership.INVITE, eventMatrix.content.membership);
-        assertEquals("mxc://fakeURL/qwerty", eventMatrix.content.avatarURL);
-        assertEquals("Invited User", eventMatrix.content.displayname);
-        assertTrue(eventMatrix.content.isDirect);
+        assertNotNull(matrixEvent.content);
+        assertEquals("A topic.", matrixEvent.content.topic);
     }
 }

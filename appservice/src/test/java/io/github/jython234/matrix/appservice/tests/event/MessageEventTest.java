@@ -73,10 +73,10 @@ class MessageEventTest {
                 "        \"msgtype\": \"m.video\",\n" +
                 "        \"url\": \"mxc://localhost/d230dASDFFxqpbQYZym562\"\n" +
                 "    },\n" +
-                "    \"event_id\": \"$143273582443PhrSn:fakeserver.net\",\n" +
+                "    \"event_id\": \"" + Constants.id + "\",\n" +
                 "    \"origin_server_ts\": 1432735824653,\n" +
-                "    \"room_id\": \"!bdcFmnylWSoSUllTqx:fakeserver.net\",\n" +
-                "    \"sender\": \"@fakeuser:fakeserver.net\",\n" +
+                "    \"room_id\": \"" + Constants.roomId + "\",\n" +
+                "    \"sender\": \"" + Constants.sender + "\",\n" +
                 "    \"type\": \"m.room.message\"\n" +
                 "}");
     }
@@ -84,9 +84,7 @@ class MessageEventTest {
     @Test
     void encodeTest() {
         var event = new MessageMatrixEvent();
-        event.sender = "@fakeuser:fakeserver.net";
-        event.id = "$143273582443PhrSn:fakeserver.net";
-        event.roomId = "!bdcFmnylWSoSUllTqx:fakeserver.net";
+        Constants.setRoomEventDefaults(event);
 
         var content = new MessageContent.VideoMessageContent();
         content.body = "A Video";
@@ -113,12 +111,13 @@ class MessageEventTest {
     private void testDecode(String event) {
         MessageMatrixEvent eventMatrix = gson.fromJson(event, MessageMatrixEvent.class);
 
-        assertEquals("!bdcFmnylWSoSUllTqx:fakeserver.net", eventMatrix.roomId);
-        assertEquals("@fakeuser:fakeserver.net", eventMatrix.sender);
-        assertEquals("$143273582443PhrSn:fakeserver.net", eventMatrix.id);
+        assertEquals(MessageMatrixEvent.TYPE, eventMatrix.getType());
+        Constants.checkRoomEventDefaults(eventMatrix);
 
         assertNotNull(eventMatrix.content);
         assertTrue(eventMatrix.content instanceof MessageContent.VideoMessageContent);
+        assertEquals(MessageContent.VideoMessageContent.TYPE, eventMatrix.content.msgtype);
+
         var content = (MessageContent.VideoMessageContent) eventMatrix.content;
 
         assertEquals("A Video", content.body);
