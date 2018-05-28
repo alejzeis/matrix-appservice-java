@@ -68,8 +68,17 @@ public class RoomMemberMatrixEvent extends RoomEvent {
          */
         public String displayname;
 
+        /**
+         * Specifies what type of Membership event this is.
+         */
         @NonNull public Membership membership;
 
+        /**
+         * If this is room is intended to be a direct chat.
+         *
+         * @see <a href="https://matrix.org/docs/spec/client_server/r0.3.0.html#direct-messaging">Matrix Direct Messaging</a>
+         */
+        @SerializedName("is_direct")
         public boolean isDirect;
 
         public enum Membership {

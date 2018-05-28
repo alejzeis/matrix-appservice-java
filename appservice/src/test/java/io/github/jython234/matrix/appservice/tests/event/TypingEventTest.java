@@ -43,23 +43,22 @@ class TypingEventTest {
     }
 
     @Test
-    void encode() {
+    void testEncode() {
         // Construct Event
         var event = new TypingMatrixEvent();
         event.roomId = "!fakeroom:fakeserver.net";
         event.content = new TypingMatrixEvent.Content();
         event.content.userIds = new String[]{"@fakeuser:fakeserver.net"};
 
-        var compiled = gson.toJson(event);
-        var expected = "{\"room_id\":\"!fakeroom:fakeserver.net\",\"content\":{\"user_ids\":[\"@fakeuser:fakeserver.net\"]},\"type\":\"m.typing\"}";
-
-        assertEquals(expected, compiled);
+        testDecode(gson.toJson(event));
     }
 
     @Test
-    void decode() {
-        var input = "{\"room_id\":\"!fakeroom:fakeserver.net\",\"content\":{\"user_ids\":[\"@fakeuser:fakeserver.net\"]},\"type\":\"m.typing\"}";
+    void testDecode() {
+        testDecode("{\"room_id\":\"!fakeroom:fakeserver.net\",\"content\":{\"user_ids\":[\"@fakeuser:fakeserver.net\"]},\"type\":\"m.typing\"}");
+    }
 
+    private void testDecode(String input) {
         var event = gson.fromJson(input, TypingMatrixEvent.class);
 
         assertEquals(TypingMatrixEvent.TYPE, event.getType());

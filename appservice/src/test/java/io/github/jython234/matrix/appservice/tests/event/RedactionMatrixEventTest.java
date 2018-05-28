@@ -33,7 +33,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 class RedactionMatrixEventTest {
     private static Gson gson;
@@ -47,33 +46,33 @@ class RedactionMatrixEventTest {
     void encodeTest() {
         RedactionMatrixEvent event = new RedactionMatrixEvent();
         event.sender = "@redactinguser:fakeserver.net";
-        event.roomId = "!fakeroom:fakeserver.net";
-        event.id = "$ekq45QxM5qpEkfj9:fakeserver.net";
-        event.redactedEvent = "$d24g6R7wRf652AxN:fakeserver.net";
+        event.roomId = "!SABnCBIIqUARlcXYsy:fakeserver.net";
+        event.id = "$15269544431jHMeV:fakeserver.net";
+        event.redactedEvent = "$15269544390zubGQ:fakserver.net";
 
         event.content = new RedactionMatrixEvent.Content();
         event.content.reason = "No reason.";
 
-
-        assertEquals("{\"redacts\":\"$d24g6R7wRf652AxN:fakeserver.net\",\"content\":{\"reason\":\"No reason.\"},\"room_id\":\"!fakeroom:fakeserver.net\",\"sender\":\"@redactinguser:fakeserver.net\",\"event_id\":\"$ekq45QxM5qpEkfj9:fakeserver.net\",\"type\":\"m.room.redaction\"}",
-                gson.toJson(event));
+        testDecode(gson.toJson(event));
     }
 
     @Test
     void decodeTest() {
-        String event = "{\n" +
+        testDecode("{\n" +
                 "      \"origin_server_ts\": 1526954443397,\n" +
                 "      \"sender\": \"@redactinguser:fakeserver.net\",\n" +
                 "      \"event_id\": \"$15269544431jHMeV:fakeserver.net\",\n" +
                 "      \"unsigned\": {\n" +
                 "        \"age\": 96\n" +
                 "      },\n" +
-                "      \"content\": {},\n" +
+                "      \"content\": {\"reason\":\"No reason.\"},\n" +
                 "      \"redacts\": \"$15269544390zubGQ:fakserver.net\",\n" +
                 "      \"type\": \"m.room.redaction\",\n" +
                 "      \"room_id\": \"!SABnCBIIqUARlcXYsy:fakeserver.net\"\n" +
-                "}";
+                "}");
+    }
 
+    private void testDecode(String event) {
         RedactionMatrixEvent eventMatrix = gson.fromJson(event, RedactionMatrixEvent.class);
 
         assertEquals(RedactionMatrixEvent.TYPE, eventMatrix.getType());
@@ -83,6 +82,6 @@ class RedactionMatrixEventTest {
         assertEquals("!SABnCBIIqUARlcXYsy:fakeserver.net", eventMatrix.roomId);
 
         assertNotNull(eventMatrix.content);
-        assertNull(eventMatrix.content.reason);
+        assertEquals("No reason.", eventMatrix.content.reason);
     }
 }

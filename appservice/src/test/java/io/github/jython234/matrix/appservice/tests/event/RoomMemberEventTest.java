@@ -33,6 +33,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RoomMemberEventTest {
     private static Gson gson;
@@ -43,8 +44,25 @@ class RoomMemberEventTest {
     }
 
     @Test
-    void testEvent() {
-        String event = "{\n" +
+    void encodeTest() {
+        RoomMemberMatrixEvent event = new RoomMemberMatrixEvent();
+        event.roomId = "!SABnCBIIqUARlcXYsy:localmatrix";
+        event.sender = "@fakeuser:fakeserver.net";
+        event.id = "$152607294010wXXPo:fakeserver.net";
+        event.stateKey = "@inviteduser:fakeserver.net";
+
+        event.content = new RoomMemberMatrixEvent.Content();
+        event.content.membership = RoomMemberMatrixEvent.Content.Membership.INVITE;
+        event.content.avatarURL = "mxc://fakeURL/qwerty";
+        event.content.displayname = "Invited User";
+        event.content.isDirect = true;
+
+        testDecode(gson.toJson(event));
+    }
+
+    @Test
+    void decodeTest() {
+        testDecode("{\n" +
                 "  \"origin_server_ts\": 1526072940657,\n" +
                 "  \"sender\": \"@fakeuser:fakeserver.net\",\n" +
                 "  \"event_id\": \"$152607294010wXXPo:fakeserver.net\",\n" +
@@ -53,15 +71,18 @@ class RoomMemberEventTest {
                 "  },\n" +
                 "  \"state_key\": \"@inviteduser:fakeserver.net\",\n" +
                 "  \"content\": {\n" +
-                "    \"membership\": \"invite\"\n" +
+                "    \"membership\": \"invite\",\n" +
+                "    \"avatarURL\": \"mxc://fakeURL/qwerty\",\n" +
+                "    \"displayname\": \"Invited User\",\n" +
+                "    \"is_direct\": true\n" +
                 "  },\n" +
                 "  \"membership\": \"invite\",\n" +
                 "  \"type\": \"m.room.member\",\n" +
                 "  \"room_id\": \"!SABnCBIIqUARlcXYsy:localmatrix\"\n" +
-                "}";
+                "}");
+    }
 
-        // Test decode
-
+    private void testDecode(String event) {
         RoomMemberMatrixEvent eventMatrix = gson.fromJson(event, RoomMemberMatrixEvent.class);
 
         assertEquals(RoomMemberMatrixEvent.TYPE, eventMatrix.getType());
@@ -72,15 +93,8 @@ class RoomMemberEventTest {
 
         assertNotNull(eventMatrix.content);
         assertEquals(RoomMemberMatrixEvent.Content.Membership.INVITE, eventMatrix.content.membership);
-
-        // Test encode
-
-        eventMatrix.content.avatarURL = "mxc://fakeURL/qwerty";
-        eventMatrix.content.displayname = "Invited User";
-        eventMatrix.content.isDirect = true;
-
-
-        assertEquals("{\"state_key\":\"@inviteduser:fakeserver.net\",\"content\":{\"avatarURL\":\"mxc://fakeURL/qwerty\",\"displayname\":\"Invited User\",\"membership\":\"invite\",\"isDirect\":true},\"room_id\":\"!SABnCBIIqUARlcXYsy:localmatrix\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$152607294010wXXPo:fakeserver.net\",\"type\":\"m.room.member\"}",
-                gson.toJson(eventMatrix));
+        assertEquals("mxc://fakeURL/qwerty", eventMatrix.content.avatarURL);
+        assertEquals("Invited User", eventMatrix.content.displayname);
+        assertTrue(eventMatrix.content.isDirect);
     }
 }

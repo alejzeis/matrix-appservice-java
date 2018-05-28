@@ -52,7 +52,7 @@ class MessageEventTest {
 
     @Test
     void decodeTest() {
-        String event = "{\n" +
+        testDecode("{\n" +
                 "    \"age\": 50,\n" +
                 "    \"content\": {\n" +
                 "        \"body\": \"A Video\",\n" +
@@ -78,8 +78,39 @@ class MessageEventTest {
                 "    \"room_id\": \"!bdcFmnylWSoSUllTqx:fakeserver.net\",\n" +
                 "    \"sender\": \"@fakeuser:fakeserver.net\",\n" +
                 "    \"type\": \"m.room.message\"\n" +
-                "}";
+                "}");
+    }
 
+    @Test
+    void encodeTest() {
+        var event = new MessageMatrixEvent();
+        event.sender = "@fakeuser:fakeserver.net";
+        event.id = "$143273582443PhrSn:fakeserver.net";
+        event.roomId = "!bdcFmnylWSoSUllTqx:fakeserver.net";
+
+        var content = new MessageContent.VideoMessageContent();
+        content.body = "A Video";
+        content.url = "mxc://localhost/d230dASDFFxqpbQYZym562";
+
+        content.info = new MessageContent.VideoMessageContent.Info();
+        content.info.width = 480;
+        content.info.height = 240;
+        content.info.duration = 12341234;
+        content.info.mimetype = "video/mp4";
+        content.info.size = 234234;
+        content.info.thumbnailUrl = "mxc://localhost/vvhOpdygXyonDWhikuxZjjhx";
+        content.info.thumbnailInfo = new MessageContent.ThumbnailInfo();
+        content.info.thumbnailInfo.mimetype = "image/jpeg";
+        content.info.thumbnailInfo.height = 300;
+        content.info.thumbnailInfo.width = 240;
+        content.info.thumbnailInfo.size = 123124;
+
+        event.content = content;
+
+        testDecode(gson.toJson(event));
+    }
+
+    private void testDecode(String event) {
         MessageMatrixEvent eventMatrix = gson.fromJson(event, MessageMatrixEvent.class);
 
         assertEquals("!bdcFmnylWSoSUllTqx:fakeserver.net", eventMatrix.roomId);
@@ -106,37 +137,5 @@ class MessageEventTest {
         assertEquals(240, content.info.thumbnailInfo.width);
         assertEquals("image/jpeg", content.info.thumbnailInfo.mimetype);
         assertEquals(123124, content.info.thumbnailInfo.size);
-    }
-
-    @Test
-    void encodeTest() {
-        var event = new MessageMatrixEvent();
-        event.sender = "@fakeuser:fakeserver.net";
-        event.id = "$12341234w52dsaf:fakeserver.net";
-        event.roomId = "!XqBunHwQIXUiqCaoxq:fakeserver.net";
-
-        var content = new MessageContent.VideoMessageContent();
-        content.body = "A video";
-        content.url = "mxc://localhost/afakeurl";
-
-        content.info = new MessageContent.VideoMessageContent.Info();
-        content.info.width = 240;
-        content.info.height = 480;
-        content.info.duration = 12341234;
-        content.info.mimetype = "video/mp4";
-        content.info.size = 5235123;
-        content.info.thumbnailUrl = "mxc://localhost/afakeurl2";
-        content.info.thumbnailInfo = new MessageContent.ThumbnailInfo();
-        content.info.thumbnailInfo.mimetype = "image/jpeg";
-        content.info.thumbnailInfo.height = 300;
-        content.info.thumbnailInfo.width = 240;
-        content.info.thumbnailInfo.size = 123124;
-
-        event.content = content;
-
-        var json = gson.toJson(event);
-        var expected = "{\"content\":{\"url\":\"mxc://localhost/afakeurl\",\"info\":{\"duration\":12341234,\"h\":480,\"w\":240,\"mimetype\":\"video/mp4\",\"size\":5235123,\"thumbnail_info\":{\"h\":300,\"w\":240,\"mimetype\":\"image/jpeg\",\"size\":123124},\"thumbnail_url\":\"mxc://localhost/afakeurl2\"},\"body\":\"A video\",\"msgtype\":\"m.video\"},\"room_id\":\"!XqBunHwQIXUiqCaoxq:fakeserver.net\",\"sender\":\"@fakeuser:fakeserver.net\",\"event_id\":\"$12341234w52dsaf:fakeserver.net\",\"type\":\"m.message\"}";
-
-        assertEquals(expected, json);
     }
 }
