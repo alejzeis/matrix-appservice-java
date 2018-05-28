@@ -27,7 +27,7 @@
 package io.github.jython234.matrix.appservice.tests.event;
 
 import com.google.gson.Gson;
-import io.github.jython234.matrix.appservice.event.RoomMemberMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.RoomMemberMatrixEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 

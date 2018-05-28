@@ -28,10 +28,10 @@ package io.github.jython234.matrix.appservice.tests.event;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.github.jython234.matrix.appservice.event.message.MessageContent;
-import io.github.jython234.matrix.appservice.event.message.MessageContentDeserializer;
-import io.github.jython234.matrix.appservice.event.message.MessageContentSerializer;
-import io.github.jython234.matrix.appservice.event.message.MessageMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.message.MessageContent;
+import io.github.jython234.matrix.appservice.event.room.message.MessageContentDeserializer;
+import io.github.jython234.matrix.appservice.event.room.message.MessageContentSerializer;
+import io.github.jython234.matrix.appservice.event.room.message.MessageMatrixEvent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

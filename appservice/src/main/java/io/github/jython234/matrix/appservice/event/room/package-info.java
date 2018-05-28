@@ -24,30 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.github.jython234.matrix.appservice.event;
-
-import com.google.gson.annotations.SerializedName;
-
 /**
- * Represents a parent class for all "m.room.*" events.
- *
- * @author jython234
+ * Sub-package dedicated to all room related events, <code>"m.room.*"</code> events.
  */
-public abstract class RoomEvent extends MatrixEvent {
-    /**
-     * The Matrix Room ID of the room this event was in.
-     */
-    @SerializedName("room_id")
-    public String roomId;
-
-    /**
-     * The sender's user ID.
-     */
-    public String sender;
-
-    /**
-     * This event's id.
-     */
-    @SerializedName("event_id")
-    public String id;
-}
+package io.github.jython234.matrix.appservice.event.room;

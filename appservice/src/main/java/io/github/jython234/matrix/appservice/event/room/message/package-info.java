@@ -24,27 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package io.github.jython234.matrix.appservice.event.message;
-
-import com.google.gson.annotations.SerializedName;
-import io.github.jython234.matrix.appservice.event.MatrixEvent;
-import io.github.jython234.matrix.appservice.event.RoomEvent;
-
 /**
- * Represents an "m.message" MatrixEvent. This event is complex,
- * as it can represent different types of media as it's message.
- *
- * @author jython234
+ * Sub-package dedicated to <code>"m.room.message"</code> matrix events.
  */
-public class MessageMatrixEvent extends RoomEvent {
-    transient public static final String TYPE = "m.message";
-
-    /**
-     * The Message content.
-     */
-    public MessageContent content;
-
-    public MessageMatrixEvent() {
-        this.type = TYPE;
-    }
-}
+package io.github.jython234.matrix.appservice.event.room.message;

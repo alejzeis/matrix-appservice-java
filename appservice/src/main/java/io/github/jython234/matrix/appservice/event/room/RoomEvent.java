@@ -24,42 +24,31 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package io.github.jython234.matrix.appservice.event.room;
+
+import com.google.gson.annotations.SerializedName;
+import io.github.jython234.matrix.appservice.event.MatrixEvent;
 
 /**
- * Contains a bare-bones implementation of a Matrix appservice,
- * along with some helper utilities such as deserialization and serialization
- * of common matrix events to and from JSON.
+ * Represents a parent class for all "m.room.*" events.
+ *
+ * @author jython234
  */
-module io.github.jython234.matrix.appservice {
-    requires java.base;
-    requires java.sql; // Needed for snakeyaml
-    requires jdk.incubator.httpclient;
+public abstract class RoomEvent extends MatrixEvent {
+    /**
+     * The Matrix Room ID of the room this event was in.
+     */
+    @SerializedName("room_id")
+    public String roomId;
 
-    requires snakeyaml;
+    /**
+     * The sender's user ID.
+     */
+    public String sender;
 
-    requires slf4j.api;
-
-    requires commons.io;
-
-    requires json.simple;
-    requires gson;
-
-    requires spring.beans;
-    requires spring.core;
-    requires spring.context;
-    requires spring.web;
-    requires spring.webmvc;
-    requires spring.boot;
-    requires spring.boot.autoconfigure;
-
-    requires tomcat.embed.core;
-
-    opens io.github.jython234.matrix.appservice to spring.core;
-
-    exports io.github.jython234.matrix.appservice;
-    exports io.github.jython234.matrix.appservice.network;
-    exports io.github.jython234.matrix.appservice.event;
-    exports io.github.jython234.matrix.appservice.event.room.message;
-    exports io.github.jython234.matrix.appservice.exception;
-    exports io.github.jython234.matrix.appservice.registration;
+    /**
+     * This event's id.
+     */
+    @SerializedName("event_id")
+    public String id;
 }

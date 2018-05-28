@@ -30,7 +30,7 @@ import com.google.gson.Gson;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.RawMatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
-import io.github.jython234.matrix.appservice.event.message.MessageMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.message.MessageMatrixEvent;
 import org.json.simple.JSONObject;
 
 final class EventDecoder {
