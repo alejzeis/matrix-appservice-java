@@ -14,6 +14,8 @@ You can browse the full repository at https://nexus.ajann.xyz
 
 Maven Repository samples are provided below:
 
+**NOTICE!** You may need to [add maven-central as a repository in your POM](https://github.com/jython234/matrix-bridge-java/blob/master/pom.xml#L41) before the ones below
+
 ### Releases:
 ```XML
 <repositories>
