@@ -49,30 +49,26 @@ class RegistrationTest {
     @Test
     @DisplayName("Load registration YAML test")
     void runLoadTest() throws IOException, KeyNotFoundException {
-        try {
-            var reg = RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration.yml").getFile());
+        var reg = RegistrationLoader.loadRegistrationFromFile(loader.getResource("registration/testRegistration.yml").getFile());
 
-            assertEquals(reg.getId(), "bigfakeid");
-            assertEquals(reg.getUrl(), "http://localhost");
-            assertEquals(reg.getAsToken(), "secretappservicetoken");
-            assertEquals(reg.getHsToken(), "secrethomeservertoken");
-            assertEquals(reg.getSenderLocalpart(), "@myappservice:localhost");
+        assertEquals("bigfakeid", reg.getId());
+        assertEquals("http://localhost", reg.getUrl());
+        assertEquals("secretappservicetoken", reg.getAsToken());
+        assertEquals("secrethomeservertoken", reg.getHsToken());
+        assertEquals("@myappservice:localhost", reg.getSenderLocalpart());
 
-            assertNotNull(reg.getNamespaces());
+        assertNotNull(reg.getNamespaces());
 
-            assertEquals(reg.getNamespaces().rooms.length, 1);
-            assertEquals(reg.getNamespaces().rooms[0], "!aksjdflknwerqwer:localhost");
+        assertEquals(1, reg.getNamespaces().rooms.length);
+        assertEquals("!aksjdflknwerqwer:localhost", reg.getNamespaces().rooms[0]);
 
-            assertEquals(reg.getNamespaces().aliases.size(), 1);
-            assertFalse(reg.getNamespaces().aliases.get(0).exclusive);
-            assertEquals(reg.getNamespaces().aliases.get(0).regex, "#!as_.*");
+        assertEquals(1, reg.getNamespaces().aliases.size());
+        assertFalse(reg.getNamespaces().aliases.get(0).exclusive);
+        assertEquals("#!as_.*", reg.getNamespaces().aliases.get(0).regex);
 
-            assertEquals(reg.getNamespaces().users.size(), 1);
-            assertTrue(reg.getNamespaces().users.get(0).exclusive);
-            assertEquals(reg.getNamespaces().users.get(0).regex, "@!as_.*");
-        } catch (KeyNotFoundException | IOException e) {
-            throw e;
-        }
+        assertEquals(1, reg.getNamespaces().users.size());
+        assertTrue(reg.getNamespaces().users.get(0).exclusive);
+        assertEquals("@!as_.*", reg.getNamespaces().users.get(0).regex);
     }
 
     @Test
