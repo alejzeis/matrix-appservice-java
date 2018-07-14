@@ -106,7 +106,6 @@ public class MatrixAppservice {
         this.threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         this.threadPoolTaskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
         this.threadPoolTaskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() * 2);
-        this.threadPoolTaskExecutor.setQueueCapacity(16);
         this.threadPoolTaskExecutor.setThreadNamePrefix("AppWorker-");
         this.threadPoolTaskExecutor.initialize();
 
