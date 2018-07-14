@@ -90,7 +90,7 @@ public class RESTController {
                 String id = NetworkUtil.createRoom(request);
 
                 MatrixAppservice.getInstance().logger.info("Created room: " + id);
-                MatrixAppservice.getInstance().threadPoolTaskExecutor.submit(() -> MatrixAppservice.getInstance().getEventHandler().onRoomAliasCreated(alias));
+                MatrixAppservice.getInstance().threadPoolTaskExecutor.submit(() -> MatrixAppservice.getInstance().getEventHandler().onRoomAliasCreated(alias, id));
 
                 return ResponseEntity.ok("{}");
             } else {

@@ -47,7 +47,7 @@ public interface EventHandler {
      * for a room alias. This will then be called to determine if the room
      * should be created or not.
      *
-     * Once created if true, the {@link #onRoomAliasCreated(String)} method will be called.
+     * Once created if true, the {@link #onRoomAliasCreated(String, String)} method will be called.
      *
      * @param alias The room alias being queried
      * @return A {@link CreateRoomRequest} instance with options for the room if it to be created, or <code>null</code> if not.
@@ -60,8 +60,9 @@ public interface EventHandler {
      * in response to the {@link #onRoomAliasQueried(String)} method.
      *
      * @param alias The room alias that was created.
+     * @param id The Matrix Room ID of the newly created room.
      */
-    default void onRoomAliasCreated(String alias) { }
+    default void onRoomAliasCreated(String alias, String id) { }
 
     /**
      * Called when the homeserver queries the appservice for a user.
