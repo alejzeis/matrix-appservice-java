@@ -74,6 +74,34 @@ public class MessageContent {
     }
 
     /**
+     * Represents a simple Text message that has formatting, for example
+     * bold or italics.
+     *
+     * @author jython234
+     */
+    public static class FormattedTextMessageContent extends TextMessageContent {
+        /**
+         * HTML formatted text content.
+         */
+        transient public static final String FORMAT_TYPE_HTML = "org.matrix.custom.html";
+
+        /**
+         * The actual formatted content.
+         */
+        @SerializedName("formatted_body")
+        public String formattedBody;
+
+        /**
+         * The type of format that the {@link #formattedBody} field contains.
+         */
+        public String format = FORMAT_TYPE_HTML;
+
+        public FormattedTextMessageContent() {
+            super();
+        }
+    }
+
+    /**
      * Represents an "m.notice" message.
      *
      * @author jython234
