@@ -30,7 +30,7 @@
  * along with some helper utilities such as deserialization and serialization
  * of common matrix events to and from JSON.
  */
-module io.github.jython234.matrix.appservice {
+module matrixjava.appservice {
     requires java.base;
     requires java.sql; // Needed for snakeyaml
     requires jdk.incubator.httpclient;
