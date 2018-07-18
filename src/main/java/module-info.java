@@ -59,6 +59,7 @@ module matrixjava.appservice {
     exports io.github.jython234.matrix.appservice;
     exports io.github.jython234.matrix.appservice.network;
     exports io.github.jython234.matrix.appservice.event;
+    exports io.github.jython234.matrix.appservice.event.presence;
     exports io.github.jython234.matrix.appservice.event.room;
     exports io.github.jython234.matrix.appservice.event.room.message;
     exports io.github.jython234.matrix.appservice.exception;
