@@ -27,14 +27,17 @@
 package io.github.jython234.matrix.appservice.network;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.RawMatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.message.MessageContent;
+import io.github.jython234.matrix.appservice.event.room.message.MessageContentDeserializer;
 import io.github.jython234.matrix.appservice.event.room.message.MessageMatrixEvent;
 import org.json.simple.JSONObject;
 
 final class EventDecoder {
-    private static Gson gson = new Gson();
+    private static Gson gson = new GsonBuilder().registerTypeAdapter(MessageContent.class, new MessageContentDeserializer()).create();
 
     static MatrixEvent decodeEvent(JSONObject json, MatrixEvent eventWithType) {
         switch (eventWithType.getType()) {
