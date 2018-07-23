@@ -31,6 +31,11 @@ import com.google.gson.GsonBuilder;
 import io.github.jython234.matrix.appservice.event.MatrixEvent;
 import io.github.jython234.matrix.appservice.event.RawMatrixEvent;
 import io.github.jython234.matrix.appservice.event.TypingMatrixEvent;
+import io.github.jython234.matrix.appservice.event.presence.PresenceMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.RedactionMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.RoomMemberMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.RoomNameMatrixEvent;
+import io.github.jython234.matrix.appservice.event.room.RoomTopicMatrixEvent;
 import io.github.jython234.matrix.appservice.event.room.message.MessageContent;
 import io.github.jython234.matrix.appservice.event.room.message.MessageContentDeserializer;
 import io.github.jython234.matrix.appservice.event.room.message.MessageMatrixEvent;
@@ -45,6 +50,16 @@ final class EventDecoder {
                 return gson.fromJson(json.toJSONString(), TypingMatrixEvent.class);
             case MessageMatrixEvent.TYPE:
                 return gson.fromJson(json.toJSONString(), MessageMatrixEvent.class);
+            case RoomMemberMatrixEvent.TYPE:
+                return gson.fromJson(json.toJSONString(), RoomMemberMatrixEvent.class);
+            case RedactionMatrixEvent.TYPE:
+                return gson.fromJson(json.toJSONString(), RedactionMatrixEvent.class);
+            case RoomNameMatrixEvent.TYPE:
+                return gson.fromJson(json.toJSONString(), RoomNameMatrixEvent.class);
+            case RoomTopicMatrixEvent.TYPE:
+                return gson.fromJson(json.toJSONString(), RoomTopicMatrixEvent.class);
+            case PresenceMatrixEvent.TYPE:
+                return gson.fromJson(json.toJSONString(), PresenceMatrixEvent.class);
             default:
                 return new RawMatrixEvent(json);
         }
