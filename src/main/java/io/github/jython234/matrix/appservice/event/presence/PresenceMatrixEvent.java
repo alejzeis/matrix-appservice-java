@@ -41,6 +41,10 @@ public class PresenceMatrixEvent extends MatrixEvent {
 
     public Content content;
 
+    public PresenceMatrixEvent() {
+        this.type = TYPE;
+    }
+
     public static class Content {
         /**
          * The MXC URL of the user's Avatar.
