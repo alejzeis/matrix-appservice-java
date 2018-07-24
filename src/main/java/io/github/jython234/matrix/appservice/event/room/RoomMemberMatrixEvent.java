@@ -62,6 +62,7 @@ public class RoomMemberMatrixEvent extends RoomEvent {
         /**
          * The user's avatar ID.
          */
+        @SerializedName("avatar_url")
         public String avatarURL;
         /**
          * The user's display name.

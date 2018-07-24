@@ -71,7 +71,7 @@ class RoomMemberEventTest {
                 "  \"state_key\": \"@inviteduser:fakeserver.net\",\n" +
                 "  \"content\": {\n" +
                 "    \"membership\": \"invite\",\n" +
-                "    \"avatarURL\": \"mxc://fakeURL/qwerty\",\n" +
+                "    \"avatar_url\": \"mxc://fakeURL/qwerty\",\n" +
                 "    \"displayname\": \"Invited User\",\n" +
                 "    \"is_direct\": true\n" +
                 "  },\n" +
